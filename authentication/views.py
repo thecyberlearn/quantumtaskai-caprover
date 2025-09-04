@@ -7,9 +7,9 @@ from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.conf import settings
 from django.urls import reverse
-from django_ratelimit.decorators import ratelimit
-from django_ratelimit import UNSAFE
-from django_ratelimit.exceptions import Ratelimited
+# from django_ratelimit.decorators import ratelimit
+# from django_ratelimit import UNSAFE
+# from django_ratelimit.exceptions import Ratelimited
 from .models import User, PasswordResetToken
 import logging
 
@@ -44,7 +44,7 @@ def handle_ratelimited(request, exception):
     return render(request, 'authentication/login.html')
 
 
-@ratelimit(key='ip', rate='5/m', method=UNSAFE, block=False)
+# @ratelimit(key='ip', rate='5/m', method=UNSAFE, block=False)
 def login_view(request):
     """User login view with rate limiting (5 attempts per minute per IP)"""
     # Handle post-login session messages
@@ -83,7 +83,7 @@ def login_view(request):
     return render(request, 'authentication/login.html')
 
 
-@ratelimit(key='ip', rate='3/m', method=UNSAFE, block=False)
+# @ratelimit(key='ip', rate='3/m', method=UNSAFE, block=False)
 def register_view(request):
     """User registration view with rate limiting (3 attempts per minute per IP)"""
     # Check if rate limited
@@ -179,7 +179,7 @@ def profile_view(request):
     return render(request, 'authentication/profile.html', context)
 
 
-@ratelimit(key='ip', rate='3/5m', method=UNSAFE, block=False)
+# @ratelimit(key='ip', rate='3/5m', method=UNSAFE, block=False)
 def forgot_password_view(request):
     """Forgot password view with rate limiting (3 attempts per 5 minutes per IP)"""
     # Check if rate limited
@@ -253,7 +253,7 @@ Quantum Tasks AI Team
     return render(request, 'authentication/forgot_password.html')
 
 
-@ratelimit(key='ip', rate='3/5m', method=UNSAFE, block=True)
+# @ratelimit(key='ip', rate='3/5m', method=UNSAFE, block=True)
 def reset_password_view(request, token):
     """Reset password view with rate limiting (3 attempts per 5 minutes per IP)"""
     reset_token = get_object_or_404(PasswordResetToken, token=token)
