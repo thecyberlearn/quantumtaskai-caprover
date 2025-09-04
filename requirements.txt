@@ -17,6 +17,7 @@ gunicorn==21.2.0
 # Essential integrations
 stripe==12.3.0
 requests==2.32.4
+django-ratelimit==3.0.1
 
 # Optional: For file processing
 reportlab==4.2.5
