@@ -67,8 +67,7 @@ class User(AbstractUser):
             
             # Invalidate wallet cache
             try:
-                # Cache invalidation removed - simplified version
-                # Cache invalidation removed
+                pass  # Cache invalidation removed - simplified version
             except ImportError:
                 pass  # Cache utils not available
             
