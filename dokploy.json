@@ -4,6 +4,7 @@
   "dockerfile": "./Dockerfile.dokploy",
   "port": 3000,
   "buildArgs": {},
+  "buildOptions": ["--no-cache"],
   "env": {
     "PYTHONUNBUFFERED": "1"
   }
