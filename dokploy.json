@@ -1,0 +1,10 @@
+{
+  "name": "quantum-tasks-ai",
+  "type": "dockerfile",
+  "dockerfile": "./Dockerfile.dokploy",
+  "port": 3000,
+  "buildArgs": {},
+  "env": {
+    "PYTHONUNBUFFERED": "1"
+  }
+}

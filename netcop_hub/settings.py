@@ -60,6 +60,10 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,testserver,
 if config('CAPROVER_GIT_COMMIT_SHA', default=''):
     ALLOWED_HOSTS = ['*']  # Allow all hosts in CapRover environment
 
+# Dokploy auto-detection
+if config('DOKPLOY_PROJECT_NAME', default=''):
+    ALLOWED_HOSTS = ['*']  # Allow all hosts in Dokploy environment
+
 # Site URL configuration for emails
 if config('RAILWAY_ENVIRONMENT', default=''):
     # Use production domain for email verification links
