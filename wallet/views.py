@@ -15,7 +15,7 @@ import ipaddress
 import json
 from django.views.decorators.csrf import ensure_csrf_cookie
 from decimal import Decimal
-from core.cache_utils import cache_user_data
+# Simplified version - no caching
 
 logger = logging.getLogger(__name__)
 

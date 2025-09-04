@@ -67,8 +67,8 @@ class User(AbstractUser):
             
             # Invalidate wallet cache
             try:
-                from core.cache_utils import invalidate_user_cache
-                invalidate_user_cache(self.id, 'wallet_data')
+                # Cache invalidation removed - simplified version
+                # Cache invalidation removed
             except ImportError:
                 pass  # Cache utils not available
             
@@ -113,8 +113,8 @@ class User(AbstractUser):
         
         # Invalidate wallet cache
         try:
-            from core.cache_utils import invalidate_user_cache
-            invalidate_user_cache(self.id, 'wallet_data')
+            # Cache invalidation removed - simplified version
+            # Cache invalidation removed
         except ImportError:
             pass  # Cache utils not available
 

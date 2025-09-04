@@ -56,6 +56,5 @@ Add JSON files to `agents/configs/agents/`:
 
 ## Documentation
 
-- `CLAUDE-SIMPLE.md` - Detailed setup guide
-- `CAPROVER_DEPLOYMENT_GUIDE.md` - Basic deployment steps
-- `CAPROVER_DEPLOYMENT_COMPLETE_GUIDE.md` - Complete setup
+- `DEPLOYMENT_GUIDE.md` - Complete CapRover deployment guide
+- `CLAUDE.md` - Technical architecture and setup details

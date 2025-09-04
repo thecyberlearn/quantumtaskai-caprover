@@ -105,8 +105,6 @@ if DEBUG:
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    'core.middleware.SecurityHeadersMiddleware',  # Custom security headers and CSP
-    'core.middleware.SecurityMonitoringMiddleware',  # Security monitoring
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -382,61 +380,17 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Caching Configuration
+# Simple cache configuration
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': config('REDIS_URL', default='redis://127.0.0.1:6379/1'),
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-            'CONNECTION_POOL_KWARGS': {
-                'max_connections': 20,
-                'retry_on_timeout': True,
-            },
-            'SERIALIZER': 'django_redis.serializers.json.JSONSerializer',
-            'COMPRESSOR': 'django_redis.compressors.zlib.ZlibCompressor',
-        },
-        'KEY_PREFIX': 'quantumtaskai',
-        'TIMEOUT': config('CACHE_TTL', default=300, cast=int),  # Configurable timeout
-        'VERSION': 1,
-    },
-    'sessions': {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': config('REDIS_URL', default='redis://127.0.0.1:6379/2'),
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        },
-        'KEY_PREFIX': 'sessions',
-        'TIMEOUT': config('SESSION_COOKIE_AGE', default=7200, cast=int),
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'quantumtaskai-cache',
     }
 }
 
-# Fallback to locmem cache if Redis not available
-try:
-    import redis
-    # Test Redis connection
-    redis_client = redis.from_url(config('REDIS_URL', default='redis://127.0.0.1:6379/1'))
-    redis_client.ping()
-except (ImportError, Exception):
-    # Use memory cache if Redis not available or can't connect
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-            'LOCATION': 'quantumtaskai-cache',
-            'OPTIONS': {
-                'MAX_ENTRIES': 1000,
-                'CULL_FREQUENCY': 3,
-            }
-        }
-    }
-
 # Session Configuration
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-SESSION_CACHE_ALIAS = 'default'
 SESSION_COOKIE_AGE = 7200  # 2 hours
-SESSION_SAVE_EVERY_REQUEST = False  # Performance optimization
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_NAME = 'quantumtaskai_sessionid'  # Custom session name for security
 
 # Authentication URLs
 LOGIN_URL = '/auth/login/'

@@ -2,43 +2,28 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install system dependencies in one layer and clean up
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
     gcc \
-    postgresql-client \
-    && pip install --upgrade pip \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get clean
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Create non-root user early
-RUN useradd --create-home --shell /bin/bash app
-
-# Copy and install requirements (better caching)
+# Copy and install Python dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt \
-    && pip cache purge
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
-COPY --chown=app:app . .
+COPY . .
 
-# Set build environment variables
-ENV SECRET_KEY="build-time-dummy-key-not-for-production" \
-    PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONPATH=/app
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    SECRET_KEY="build-time-dummy-key-change-in-production"
 
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
-# Switch to non-root user
-USER app
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD python manage.py check || exit 1
-
 # Expose port
 EXPOSE 80
 
-# Optimized gunicorn configuration
-CMD ["gunicorn", "--bind", "0.0.0.0:80", "--workers", "2", "--threads", "4", "--worker-class", "gthread", "--worker-tmp-dir", "/dev/shm", "--timeout", "120", "--keep-alive", "5", "--max-requests", "1000", "--max-requests-jitter", "100", "netcop_hub.wsgi:application"]
+# Start gunicorn
+CMD ["gunicorn", "netcop_hub.wsgi:application", "--bind", "0.0.0.0:80"]

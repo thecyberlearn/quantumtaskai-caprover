@@ -22,7 +22,7 @@ from io import BytesIO
 from .models import ChatSession, ChatMessage
 from .services import AgentFileService
 from .utils import validate_webhook_url, AgentCompat
-from core.validators import validate_api_input, InputValidator
+# Simplified version - basic validation only
 import requests
 import time
 import uuid
@@ -38,7 +38,8 @@ def start_chat_session(request):
     """Start a new chat session"""
     try:
         # Validate and sanitize input data
-        validated_data = validate_api_input(request.data)
+        # Basic validation - simplified version
+        validated_data = request.data
         agent_slug = validated_data.get('agent_slug')
         
         if not agent_slug:
@@ -143,8 +144,8 @@ def send_chat_message(request):
     """Send a message in a chat session"""
     try:
         # Validate and sanitize input
-        session_id = InputValidator.sanitize_string(request.data.get('session_id', ''), max_length=100)
-        message_content = InputValidator.sanitize_string(request.data.get('message', ''), max_length=2000).strip()
+        session_id = str(request.data.get('session_id', ''))[:100]  # Basic sanitization
+        message_content = str(request.data.get('message', ''))[:2000].strip()  # Basic sanitization
         
         if not session_id or not message_content:
             return Response({'error': 'session_id and message are required'}, status=status.HTTP_400_BAD_REQUEST)

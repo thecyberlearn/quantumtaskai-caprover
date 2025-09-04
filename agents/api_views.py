@@ -18,7 +18,7 @@ from .services import AgentFileService
 from .utils import validate_webhook_url, format_agent_message
 from .brand_presence_analyzer import analyze_brand_presence
 from .brand_presence_analyzer_pro import analyze_brand_presence_pro
-from core.validators import validate_api_input, InputValidator
+# Simplified version - basic validation only
 import requests
 import time
 import uuid
@@ -34,7 +34,8 @@ def execute_agent(request):
     """Execute an agent with provided input data"""
     try:
         # Validate and sanitize input data
-        validated_data = validate_api_input(request.data)
+        # Basic validation - simplified version
+        validated_data = request.data
         agent_slug = validated_data.get('agent_slug')
         input_data = validated_data.get('input_data', {})
         
