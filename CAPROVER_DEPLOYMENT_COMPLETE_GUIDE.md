@@ -142,7 +142,7 @@ https://github.com/quantumtaskai/qunatum-render.git
 
 **Authentication (Method B - Tested and Working):**
 - **Username**: `quantumtaskai` (your GitHub username)
-- **Password**: `ghp_your_github_personal_access_token` (GitHub Personal Access Token)
+- **Password**: `ghp_YOUR_GITHUB_TOKEN_HERE` (GitHub Personal Access Token)
 - **Branch**: `main`
 
 **Note:** The username/password method proved more reliable than embedding tokens in the URL.
@@ -154,23 +154,23 @@ https://github.com/quantumtaskai/qunatum-render.git
 **Complete Environment Variables:**
 ```env
 DATABASE_URL=postgres://quantum_user:7e9f4e144881879c@srv-captain--quantum-digital-db:5432/quantum-tasks-db
-SECRET_KEY=d)3s=sh(^gijpjoo^=0y-0(c23j%$*b8=vb4yo&p_(xr(17tt1
+SECRET_KEY=your-secret-key-here
 DEBUG=false
 ALLOWED_HOSTS=quantumtaskai.captain.your-domain.com
 DEPLOYMENT_ENVIRONMENT=production
 
 # Email Configuration
 EMAIL_HOST_USER=thecyberlearn@gmail.com
-EMAIL_HOST_PASSWORD=ueqd ulan xcwl cfrr
+EMAIL_HOST_PASSWORD=your-email-app-password
 
 # Stripe Configuration
-STRIPE_SECRET_KEY=sk_test_your_stripe_test_key
-STRIPE_WEBHOOK_SECRET=whsec_3IbdUV75ljx5TdHdDGnEgGLRSvOopYyy
+STRIPE_SECRET_KEY=sk_test_YOUR_STRIPE_SECRET_KEY
+STRIPE_WEBHOOK_SECRET=whsec_YOUR_STRIPE_WEBHOOK_SECRET
 
 # AI API Keys
-OPENAI_API_KEY=sk-proj-your_openai_api_key
+OPENAI_API_KEY=sk-proj-YOUR_OPENAI_API_KEY
 GROQ_API_KEY=gsk_your_groq_api_key
-SERPAPI_API_KEY=2b8a90c1f2e3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7g8h9i0
+SERPAPI_API_KEY=YOUR_SERPAPI_API_KEY
 ```
 
 ### 3.4 Deploy Application
