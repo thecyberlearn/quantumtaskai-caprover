@@ -1,0 +1,34 @@
+<div class="quick-agents-overlay" id="quickAgentsOverlay" onclick="closeQuickAgents()" aria-hidden="true"></div>
+
+<div class="quick-agents-panel" id="quickAgentsPanel" role="dialog" aria-labelledby="quickAgentsTitle" aria-hidden="true">
+    <div class="quick-agents-header">
+        <h3 id="quickAgentsTitle">Quick Access to Other Agents</h3>
+        <button class="close-panel" onclick="toggleQuickAgents()" aria-label="Close quick agents panel">×</button>
+    </div>
+
+    <div class="quick-agents-grid">
+        {% for agent in all_agents %}
+            {% if agent.access_url_name and agent.display_url_name %}
+                <!-- Direct Access Agent -->
+                <a href="{% url 'agents:direct_access_handler' agent.slug %}" class="quick-agent-card">
+            {% else %}
+                <!-- Webhook Agent -->
+                <a href="{% url 'agents:detail' agent.slug %}" class="quick-agent-card">
+            {% endif %}
+                <div class="agent-icon">{{ agent.category.icon }}</div>
+                <div class="agent-info">
+                    <h4>{{ agent.name }}</h4>
+                    <div class="agent-price">{{ agent.price }} AED</div>
+                </div>
+            </a>
+        {% empty %}
+            <p style="text-align: center; color: var(--on-surface-variant); padding: 20px;">
+                No other agents available
+            </p>
+        {% endfor %}
+    </div>
+
+    <div class="quick-agents-footer">
+        <a href="{% url 'agents:marketplace' %}" class="view-all-agents">View All Agents →</a>
+    </div>
+</div>

@@ -1,0 +1,206 @@
+{% if previous_sessions %}
+<div class="agent-widget widget-small" style="min-width: min(280px, 100%); max-width: min(280px, 100%); margin-left: auto;">
+    <div class="widget-header">
+        <h3 class="widget-title">
+            <span class="widget-icon">📋</span>
+            Previous Sessions
+        </h3>
+    </div>
+    <div class="widget-content">
+        {% for session in previous_sessions %}
+        <div class="session-item">
+            <div class="session-header">
+                <div class="session-info">
+                    <span class="session-status status-{{ session.status }}">
+                        {% if session.status == 'completed' %}✅{% elif session.status == 'expired' %}⏰{% elif session.status == 'abandoned' %}❌{% endif %}
+                        {{ session.get_status_display }}
+                    </span>
+                    <span class="session-date">{{ session.created_at|date:"M d" }}</span>
+                </div>
+                <div class="session-stats">
+                    <span class="message-count">{{ session.user_message_count }}/{{ session.agent.message_limit }} msgs</span>
+                </div>
+            </div>
+            
+            {% if session.user_message_count > 0 and session.status != 'active' %}
+            <div class="session-actions">
+                <div class="download-actions">
+                    <a href="{% url 'agents:export_chat' session.session_id %}?format=pdf" 
+                       class="download-link pdf-link" 
+                       title="Download PDF">
+                        📄 PDF
+                    </a>
+                    <a href="{% url 'agents:export_chat' session.session_id %}?format=txt" 
+                       class="download-link txt-link" 
+                       title="Download TXT">
+                        📝 TXT
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+        
+        {% if previous_sessions|length >= 5 %}
+        <div class="view-all-sessions">
+            <a href="#" class="view-all-link" onclick="alert('Full session history coming soon!')">
+                View All Sessions →
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.session-item {
+    padding: var(--spacing-sm);
+    border: 1px solid var(--outline-variant);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-sm);
+    background: var(--surface);
+    transition: all 0.2s ease;
+}
+
+.session-item:hover {
+    background: var(--surface-variant);
+    border-color: var(--primary);
+}
+
+.session-item:last-child {
+    margin-bottom: 0;
+}
+
+.session-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-xs);
+}
+
+.session-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.session-status {
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.session-status.status-completed {
+    color: var(--success);
+}
+
+.session-status.status-expired {
+    color: var(--warning);
+}
+
+.session-status.status-abandoned {
+    color: var(--error);
+}
+
+.session-date {
+    font-size: 11px;
+    color: var(--on-surface-variant);
+}
+
+.session-stats {
+    text-align: right;
+}
+
+.message-count {
+    font-size: 11px;
+    color: var(--on-surface-variant);
+    background: var(--surface-variant);
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+.session-actions {
+    border-top: 1px solid var(--outline-variant);
+    padding-top: var(--spacing-xs);
+}
+
+.download-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    justify-content: center;
+}
+
+.download-link {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    flex: 1;
+    justify-content: center;
+}
+
+.download-link:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+    color: white;
+    text-decoration: none;
+}
+
+.download-link.pdf-link {
+    background: #dc2626;
+}
+
+.download-link.pdf-link:hover {
+    background: #b91c1c;
+}
+
+.download-link.txt-link {
+    background: var(--primary);
+}
+
+.download-link.txt-link:hover {
+    background: var(--primary-dark);
+}
+
+.view-all-sessions {
+    margin-top: var(--spacing-sm);
+    text-align: center;
+    border-top: 1px solid var(--outline-variant);
+    padding-top: var(--spacing-sm);
+}
+
+.view-all-link {
+    font-size: 12px;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.view-all-link:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .session-header {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+    
+    .session-stats {
+        text-align: left;
+    }
+    
+    .download-actions {
+        flex-direction: column;
+    }
+}
+</style>
+{% endif %}

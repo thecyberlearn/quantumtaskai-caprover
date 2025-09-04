@@ -1,0 +1,16 @@
+{
+  "slug": "swot-analysis-expert",
+  "name": "SWOT Analysis Expert",
+  "short_description": "Strategic business analysis consultation",
+  "description": "Get expert SWOT analysis to evaluate your business strengths, weaknesses, opportunities, and threats with professional strategic insights.",
+  "category": "analysis",
+  "price": 0.0,
+  "agent_type": "form",
+  "system_type": "direct_access",
+  "form_schema": {
+    "fields": []
+  },
+  "webhook_url": "https://agent.jotform.com/019880edcf997a41a2b4c50daa850a50a0b9",
+  "access_url_name": "agents:direct_access_handler",
+  "display_url_name": "agents:direct_access_display"
+}

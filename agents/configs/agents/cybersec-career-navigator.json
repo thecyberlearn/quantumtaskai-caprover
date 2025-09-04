@@ -1,0 +1,16 @@
+{
+  "slug": "cybersec-career-navigator",
+  "name": "CyberSec Career Navigator", 
+  "short_description": "Get personalized cybersecurity career guidance from AI expert Jessica",
+  "description": "Navigate your cybersecurity career path with expert AI guidance. Get personalized advice on certifications, job roles, skills development, and career progression.",
+  "category": "career-education",
+  "price": 0.0,
+  "agent_type": "form",
+  "system_type": "direct_access",
+  "form_schema": {
+    "fields": []
+  },
+  "webhook_url": "https://agent.jotform.com/019865a942ab7fa5b5b743a5fd2abe09e345",
+  "access_url_name": "agents:direct_access_handler",
+  "display_url_name": "agents:direct_access_display"
+}

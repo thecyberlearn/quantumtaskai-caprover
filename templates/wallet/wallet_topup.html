@@ -1,0 +1,754 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Top Up Wallet - Quantum Tasks AI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/agent-base.css' %}">
+<style>
+/* Wallet Top-up Page - Optimized Agent-Inspired Design */
+
+/* Override main-container for full-width sections */
+.main-container {
+    max-width: none;
+    padding: 0;
+    margin-top: 0;
+}
+
+/* Top-up page styles */
+.topup-page {
+    background: var(--background);
+    min-height: calc(100vh - 84px);
+    padding: var(--spacing-lg);
+}
+
+.topup-container-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: var(--spacing-lg);
+}
+    
+/* Hero section - Agent card style */
+.topup-hero {
+    background: var(--primary);
+    color: white;
+    padding: var(--spacing-xl);
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+}
+
+.topup-hero h1 {
+    font-size: 24px;
+    margin: 0 0 var(--spacing-sm) 0;
+    font-weight: 700;
+}
+
+.topup-hero .subtitle {
+    font-size: 16px;
+    opacity: 0.9;
+    margin: 0;
+}
+    
+/* Back to wallet link */
+.back-to-wallet {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition);
+    background: var(--surface-variant);
+    border: 1px solid var(--outline);
+}
+
+.back-to-wallet:hover {
+    background: var(--surface);
+    transform: translateX(-2px);
+    color: var(--primary);
+}
+
+/* Main content and sidebar layout */
+.topup-main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+/* Main form container - Agent card style */
+.topup-container {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-xl);
+    border: 1px solid var(--outline);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition);
+}
+
+.topup-container:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--outline-variant);
+}
+    
+    /* Messages */
+    .messages {
+        margin-bottom: clamp(16px, 4vw, 20px);
+    }
+    
+    .message {
+        padding: 12px 16px;
+        border-radius: clamp(8px, 2vw, 12px);
+        margin-bottom: 8px;
+        font-weight: 500;
+        font-size: clamp(14px, 3.5vw, 16px);
+    }
+    
+    .message.success {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--success-dark);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    
+    .message.error {
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--error-red);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    
+    /* Form header */
+    .form-header {
+        text-align: center;
+        margin-bottom: clamp(24px, 6vw, 32px);
+    }
+    
+    .form-title {
+        font-size: clamp(18px, 4.5vw, 22px);
+        font-weight: 700;
+        color: var(--text-primary);
+        margin: 0 0 8px 0;
+    }
+    
+    .form-subtitle {
+        font-size: clamp(14px, 3.5vw, 16px);
+        color: var(--text-secondary);
+        margin: 0;
+    }
+    
+    /* Amount options grid */
+    .amount-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
+        gap: clamp(12px, 3vw, 16px);
+        margin-bottom: clamp(24px, 6vw, 32px);
+    }
+    
+    .amount-option {
+        background: white;
+        border: 2px solid var(--border-light);
+        border-radius: clamp(8px, 2vw, 12px);
+        padding: clamp(16px, 4vw, 20px);
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .amount-option:hover {
+        border-color: var(--primary-blue);
+        background: rgba(59, 130, 246, 0.02);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+    }
+    
+    .amount-option.selected {
+        border-color: var(--primary-blue);
+        background: rgba(59, 130, 246, 0.05);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+    }
+    
+    .amount-option.selected::before {
+        content: '✓';
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: var(--primary-blue);
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
+    }
+    
+    .amount-value {
+        font-size: clamp(18px, 4.5vw, 22px);
+        font-weight: 700;
+        color: var(--primary-blue);
+        margin-bottom: 4px;
+    }
+    
+    .amount-label {
+        font-size: clamp(12px, 3vw, 14px);
+        color: var(--text-secondary);
+        font-weight: 500;
+    }
+    
+    .amount-option.popular {
+        border-color: var(--success-green);
+        position: relative;
+    }
+    
+    .amount-option.popular::after {
+        content: '🔥 Popular';
+        position: absolute;
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--success-green);
+        color: white;
+        font-size: 10px;
+        font-weight: 600;
+        padding: 2px 8px;
+        border-radius: 8px;
+    }
+    
+    .amount-option.popular .amount-value {
+        color: var(--success-green);
+    }
+    
+    /* Submit button */
+    .topup-btn {
+        width: 100%;
+        background: var(--gradient-primary);
+        color: white;
+        border: none;
+        padding: clamp(16px, 4vw, 20px);
+        border-radius: clamp(8px, 2vw, 12px);
+        font-size: clamp(16px, 4vw, 18px);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+    
+    .topup-btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        filter: brightness(1.1);
+    }
+    
+    .topup-btn:disabled {
+        background: var(--text-muted);
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+    
+    /* Security notice */
+    .security-notice {
+        background: rgba(16, 185, 129, 0.05);
+        border: 1px solid rgba(16, 185, 129, 0.2);
+        border-radius: clamp(8px, 2vw, 12px);
+        padding: clamp(12px, 3vw, 16px);
+        margin-top: clamp(16px, 4vw, 20px);
+        text-align: center;
+    }
+    
+    .security-notice .icon {
+        font-size: 20px;
+        margin-bottom: 4px;
+    }
+    
+    .security-notice .text {
+        font-size: clamp(12px, 3vw, 14px);
+        color: var(--success-green);
+        font-weight: 500;
+        margin: 0;
+    }
+    
+/* Sidebar Styles */
+.topup-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--outline);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition);
+    overflow: hidden;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--outline-variant);
+}
+
+.card-header {
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--outline);
+    background: var(--surface-variant);
+}
+
+.card-content {
+    padding: var(--spacing-lg);
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--on-surface);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+/* Current Balance */
+.current-balance {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.balance-note {
+    font-size: 14px;
+    color: var(--on-surface-variant);
+    margin: 0;
+}
+
+/* Info List */
+.info-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.info-icon {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+}
+
+.info-text {
+    font-size: 14px;
+    color: var(--on-surface);
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background: var(--surface-variant);
+    border: 1px solid var(--outline);
+    border-radius: var(--radius-sm);
+    color: var(--on-surface);
+    text-decoration: none;
+    transition: all var(--transition);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.action-btn:hover {
+    background: var(--surface);
+    border-color: var(--outline-variant);
+    transform: translateY(-1px);
+    color: var(--on-surface);
+}
+
+/* Enhanced Responsive Design */
+@media (max-width: 1024px) {
+    .topup-container-wrapper {
+        grid-template-columns: 1fr 300px;
+        gap: var(--spacing-md);
+    }
+}
+
+@media (max-width: 768px) {
+    .topup-page {
+        padding: var(--spacing-md);
+    }
+    
+    .topup-container-wrapper {
+        grid-template-columns: 1fr 280px;
+        gap: var(--spacing-md);
+    }
+}
+
+@media (max-width: 600px) {
+    .topup-container-wrapper {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .topup-sidebar {
+        order: -1;
+    }
+}
+
+@media (max-width: 480px) {
+    .topup-page {
+        padding: var(--spacing-sm);
+    }
+    
+    .amount-options {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .current-balance {
+        font-size: 24px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="topup-page theme-professional">
+    <a href="{% url 'wallet:wallet' %}" class="back-to-wallet">
+        ← Back to Wallet
+    </a>
+    
+    <div class="topup-container-wrapper">
+        <!-- Main Content -->
+        <main class="topup-main" role="main">
+            <!-- Hero Section -->
+            <section class="topup-hero" aria-labelledby="topup-heading">
+                <h1 id="topup-heading">💳 Top Up Your Wallet</h1>
+                <p class="subtitle">Add funds to continue using AI agents</p>
+            </section>
+            
+            <!-- Main Container -->
+            <section class="topup-container" aria-labelledby="form-heading">
+                <!-- Messages -->
+                {% if messages %}
+                    <div class="messages" role="alert">
+                        {% for message in messages %}
+                            <div class="message {{ message.tags }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+                <!-- Form Header -->
+                <div class="form-header">
+                    <h2 id="form-heading" class="form-title">Select Top-Up Amount</h2>
+                    <p class="form-subtitle">Choose how much you'd like to add to your wallet</p>
+                </div>
+                
+                <!-- Top-up Form -->
+                <form method="post" id="topup-form" aria-label="Top-up amount selection">
+                    {% csrf_token %}
+                    
+                    <!-- Amount Options -->
+                    <div class="amount-options" role="group" aria-label="Amount selection">
+                        <div class="amount-option" 
+                             data-amount="10" 
+                             role="button" 
+                             tabindex="0"
+                             aria-label="Select 10 AED">
+                            <div class="amount-value">10 AED</div>
+                            <div class="amount-label">Basic</div>
+                        </div>
+                        <div class="amount-option popular" 
+                             data-amount="50" 
+                             role="button" 
+                             tabindex="0"
+                             aria-label="Select 50 AED - Popular choice">
+                            <div class="amount-value">50 AED</div>
+                            <div class="amount-label">Popular</div>
+                        </div>
+                        <div class="amount-option" 
+                             data-amount="100" 
+                             role="button" 
+                             tabindex="0"
+                             aria-label="Select 100 AED - Best value">
+                            <div class="amount-value">100 AED</div>
+                            <div class="amount-label">Best Value</div>
+                        </div>
+                    </div>
+                    
+                    <input type="hidden" name="amount" id="selected-amount" value="">
+                    <button type="submit" 
+                            class="topup-btn" 
+                            id="topup-btn" 
+                            disabled
+                            aria-describedby="security-notice">
+                        💰 Select an amount
+                    </button>
+                </form>
+                
+                <!-- Security Notice -->
+                <div class="security-notice" id="security-notice">
+                    <div class="icon" aria-hidden="true">🔒</div>
+                    <p class="text">Secure payment processing • Your data is protected</p>
+                </div>
+            </section>
+        </main>
+        
+        <!-- Sidebar -->
+        <aside class="topup-sidebar">
+            <!-- Current Balance -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="section-title">💰 Current Balance</h3>
+                </div>
+                <div class="card-content">
+                    <div class="current-balance">
+                        <span data-wallet-balance>{{ user.wallet_balance|floatformat:2 }}</span> AED
+                    </div>
+                    <p class="balance-note">Available for AI agent usage</p>
+                </div>
+            </div>
+            
+            <!-- Quick Info -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="section-title">ℹ️ Top-Up Info</h3>
+                </div>
+                <div class="card-content">
+                    <div class="info-list">
+                        <div class="info-item">
+                            <span class="info-icon">⚡</span>
+                            <span class="info-text">Instant wallet credit</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-icon">🔒</span>
+                            <span class="info-text">Secure Stripe payment</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-icon">💳</span>
+                            <span class="info-text">All major cards accepted</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-icon">🤖</span>
+                            <span class="info-text">Ready for AI agents</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="section-title">⚡ Quick Actions</h3>
+                </div>
+                <div class="card-content">
+                    <div class="quick-actions">
+                        <a href="{% url 'wallet:wallet' %}" class="action-btn">
+                            📊 View Transactions
+                        </a>
+                        <a href="{% url 'agents:marketplace' %}" class="action-btn">
+                            🤖 Browse Agents
+                        </a>
+                        <a href="{% url 'core:homepage' %}" class="action-btn">
+                            🏠 Back to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Enhanced Top-up Manager with Accessibility
+class TopupManager {
+    constructor() {
+        try {
+            this.amountOptions = document.querySelectorAll('.amount-option');
+            this.selectedAmountInput = document.getElementById('selected-amount');
+            this.topupBtn = document.getElementById('topup-btn');
+            this.currentSelection = null;
+            
+            this.init();
+        } catch (error) {
+            console.error('Failed to initialize TopupManager:', error);
+        }
+    }
+    
+    init() {
+        if (this.amountOptions.length === 0) {
+            console.warn('No amount options found');
+            return;
+        }
+        
+        this.setupAmountSelection();
+        this.addKeyboardNavigation();
+    }
+    
+    setupAmountSelection() {
+        this.amountOptions.forEach((option, index) => {
+            // Click handler
+            option.addEventListener('click', () => this.selectAmount(option));
+            
+            // Keyboard handler
+            option.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.selectAmount(option);
+                }
+            });
+        });
+    }
+    
+    selectAmount(selectedOption) {
+        try {
+            // Remove selected state from all options
+            this.amountOptions.forEach(option => {
+                option.classList.remove('selected');
+                option.setAttribute('aria-selected', 'false');
+            });
+            
+            // Add selected state to chosen option
+            selectedOption.classList.add('selected');
+            selectedOption.setAttribute('aria-selected', 'true');
+            
+            // Set the selected amount
+            const amount = selectedOption.getAttribute('data-amount');
+            this.selectedAmountInput.value = amount;
+            this.currentSelection = amount;
+            
+            // Enable submit button and update text
+            this.topupBtn.disabled = false;
+            this.topupBtn.innerHTML = `💳 Top Up ${amount} AED`;
+            this.topupBtn.setAttribute('aria-label', `Proceed to pay ${amount} AED`);
+            
+            // Announce selection to screen readers
+            this.announceSelection(amount);
+            
+        } catch (error) {
+            console.error('Error selecting amount:', error);
+            this.showError('Failed to select amount. Please try again.');
+        }
+    }
+    
+    addKeyboardNavigation() {
+        // Arrow key navigation between amount options
+        this.amountOptions.forEach((option, index) => {
+            option.addEventListener('keydown', (e) => {
+                let targetIndex = index;
+                
+                switch(e.key) {
+                    case 'ArrowLeft':
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        targetIndex = index > 0 ? index - 1 : this.amountOptions.length - 1;
+                        break;
+                    case 'ArrowRight':
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        targetIndex = index < this.amountOptions.length - 1 ? index + 1 : 0;
+                        break;
+                    default:
+                        return;
+                }
+                
+                this.amountOptions[targetIndex].focus();
+            });
+        });
+    }
+    
+    announceSelection(amount) {
+        // Create or update live region for screen reader announcements
+        let liveRegion = document.getElementById('selection-announcement');
+        if (!liveRegion) {
+            liveRegion = document.createElement('div');
+            liveRegion.id = 'selection-announcement';
+            liveRegion.setAttribute('aria-live', 'polite');
+            liveRegion.setAttribute('aria-atomic', 'true');
+            liveRegion.style.position = 'absolute';
+            liveRegion.style.left = '-9999px';
+            document.body.appendChild(liveRegion);
+        }
+        
+        liveRegion.textContent = `Selected ${amount} AED for top-up`;
+    }
+    
+    showError(message) {
+        // Simple error display - could be enhanced with toast notifications
+        const existingError = document.querySelector('.error-message');
+        if (existingError) {
+            existingError.remove();
+        }
+        
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.textContent = message;
+        errorDiv.style.cssText = `
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 16px;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        `;
+        
+        this.topupBtn.parentNode.insertBefore(errorDiv, this.topupBtn.nextSibling);
+        
+        setTimeout(() => {
+            if (errorDiv.parentNode) {
+                errorDiv.remove();
+            }
+        }, 5000);
+    }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    new TopupManager();
+    
+    // Add form validation
+    const form = document.getElementById('topup-form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const selectedAmount = document.getElementById('selected-amount').value;
+            if (!selectedAmount) {
+                e.preventDefault();
+                alert('Please select an amount before proceeding.');
+                return false;
+            }
+        });
+    }
+});
+
+// Add loading state for form submission
+document.getElementById('topup-form')?.addEventListener('submit', function() {
+    const button = document.getElementById('topup-btn');
+    button.disabled = true;
+    button.innerHTML = '⏳ Processing...';
+});
+</script>
+{% endblock %}

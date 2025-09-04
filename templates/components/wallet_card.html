@@ -1,0 +1,17 @@
+<div class="wallet-card widget-small" style="margin-bottom: 0;">
+    <div class="wallet-header">
+        <h3 class="wallet-title">Your Wallet</h3>
+        <div class="wallet-icon">💳</div>
+    </div>
+    <div class="balance-display">
+        <div class="balance-amount">
+            <span id="walletBalance">{{ user.wallet_balance|floatformat:2 }}</span> AED
+        </div>
+        <div class="balance-label">Available Balance</div>
+    </div>
+    <div style="margin-top: 12px;">
+        <a href="{% url 'wallet:wallet_topup' %}" class="wallet-topup-btn" style="display: block; width: 100%; padding: 8px 16px; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; border: none; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; text-decoration: none; text-align: center; box-sizing: border-box;">
+            💳 Top Up Wallet
+        </a>
+    </div>
+</div>

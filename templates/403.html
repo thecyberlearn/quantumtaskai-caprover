@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Access Denied - Quantum Tasks AI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/agent-base.css' %}?v={{ timestamp }}">
+{% endblock %}
+
+{% block content %}
+<!-- Agent Header Component -->
+{% include "components/agent_header.html" with agent_title="Access Denied" agent_subtitle="You don't have permission to access this resource" %}
+
+<!-- Quick Agents Panel Component -->
+{% include "components/quick_agents_panel.html" %}
+
+<!-- Error Content -->
+<div class="agent-container">
+    <div class="agent-grid">
+        <!-- Main Error Widget -->
+        <div class="agent-widget widget-large">
+            <div class="agent-widget-header">
+                <h2 class="agent-widget-title">
+                    <span class="agent-icon">🛡️</span>
+                    403 - Access Denied
+                </h2>
+                <p class="agent-widget-subtitle">Permission required to access this resource</p>
+            </div>
+            
+            <div class="agent-widget-content">
+                <div class="error-content">
+                    <div class="error-illustration">
+                        <div class="error-icon-large">🔒</div>
+                        <p class="error-message">
+                            You don't have the necessary permissions to access this resource. 
+                            Please log in with the appropriate account or contact support for assistance.
+                        </p>
+                    </div>
+                    
+                    <div class="error-actions">
+                        <div class="button-group">
+                            {% if not user.is_authenticated %}
+                                <a href="{% url 'authentication:login' %}" class="btn btn-primary">
+                                    <span class="btn-icon">🔑</span>
+                                    Login
+                                </a>
+                                <a href="{% url 'authentication:register' %}" class="btn btn-secondary">
+                                    <span class="btn-icon">📝</span>
+                                    Register
+                                </a>
+                            {% else %}
+                                <a href="{% url 'core:homepage' %}" class="btn btn-primary">
+                                    <span class="btn-icon">🏠</span>
+                                    Go Home
+                                </a>
+                                <a href="{% url 'agents:marketplace' %}" class="btn btn-secondary">
+                                    <span class="btn-icon">🤖</span>
+                                    Browse AI Agents
+                                </a>
+                            {% endif %}
+                        </div>
+                        
+                        {% if user.is_authenticated %}
+                        <div class="user-info-section">
+                            <p class="user-info-text">
+                                Currently logged in as: <strong>{{ user.username }}</strong>
+                            </p>
+                            <p class="user-info-text">
+                                If you believe this is an error, please contact support.
+                            </p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Support Widget -->
+        <div class="agent-widget widget-small" style="margin-left: auto;">
+            <div class="agent-widget-header">
+                <h3 class="agent-widget-title">
+                    <span class="agent-icon">🆘</span>
+                    Need Access?
+                </h3>
+            </div>
+            <div class="agent-widget-content">
+                <div class="support-content">
+                    <p class="support-text">If you need access to this resource:</p>
+                    <div class="support-actions">
+                        {% if not user.is_authenticated %}
+                        <a href="{% url 'authentication:login' %}" class="support-link">
+                            🔐 Login to your account
+                        </a>
+                        <a href="{% url 'authentication:register' %}" class="support-link">
+                            👤 Create new account
+                        </a>
+                        {% endif %}
+                        <a href="mailto:support@quantumtaskai.com" class="support-link">
+                            📧 Contact Support
+                        </a>
+                        <a href="{% url 'agents:marketplace' %}" class="support-link">
+                            🤖 View Available Agents
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* 403 Error specific styling that follows agent theme */
+.error-content {
+    text-align: center;
+    padding: var(--spacing-lg);
+}
+
+.error-illustration {
+    margin-bottom: var(--spacing-xl);
+}
+
+.error-icon-large {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-md);
+    line-height: 1;
+}
+
+.error-message {
+    font-size: var(--text-lg);
+    color: var(--on-surface-variant);
+    line-height: 1.6;
+    max-width: 500px;
+    margin: 0 auto var(--spacing-xl);
+}
+
+.error-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+    align-items: center;
+}
+
+.button-group {
+    display: flex;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.user-info-section {
+    text-align: center;
+    padding: var(--spacing-md);
+    background: var(--surface-variant);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--outline-variant);
+}
+
+.user-info-text {
+    font-size: var(--text-sm);
+    color: var(--on-surface-variant);
+    margin-bottom: var(--spacing-xs);
+}
+
+.user-info-text:last-child {
+    margin-bottom: 0;
+}
+
+.support-content {
+    padding: var(--spacing-md);
+    text-align: center;
+}
+
+.support-text {
+    color: var(--on-surface-variant);
+    margin-bottom: var(--spacing-md);
+    font-size: var(--text-sm);
+}
+
+.support-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.support-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm);
+    background: var(--surface-variant);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: var(--on-surface);
+    font-size: var(--text-sm);
+    transition: all 0.2s ease;
+    border: 1px solid var(--outline-variant);
+}
+
+.support-link:hover {
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .button-group {
+        flex-direction: column;
+        width: 100%;
+    }
+}
+</style>
+{% endblock %}

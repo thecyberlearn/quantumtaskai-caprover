@@ -1,0 +1,1044 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Wallet - Quantum Tasks AI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/agent-base.css' %}">
+<style>
+/* Wallet Page - Optimized Styles */
+
+/* Optimized Layout System */
+.wallet-page {
+    min-height: calc(100vh - 84px);
+    padding: var(--spacing-lg);
+}
+
+.wallet-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: var(--spacing-lg);
+}
+
+.wallet-main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+/* Card System - Same as Agent Cards */
+.card {
+    background: var(--surface);
+    border: 1px solid var(--outline);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition);
+    overflow: hidden;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--outline-variant);
+}
+
+.card-header {
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--outline);
+    background: var(--surface-variant);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+}
+
+.card-content {
+    padding: var(--spacing-lg);
+}
+
+/* Section Titles - Same as Agent Titles */
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--on-surface);
+    margin: 0 0 var(--spacing-md) 0;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+/* Balance Display Card */
+.balance-card {
+    text-align: center;
+    background: var(--primary);
+    color: white;
+    border: 1px solid var(--outline);
+}
+
+.balance-card .card-content {
+    padding: var(--spacing-xl);
+}
+
+.balance-amount {
+    font-size: 42px;
+    font-weight: 700;
+    margin: var(--spacing-md) 0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.balance-label {
+    font-size: 16px;
+    opacity: 0.9;
+    margin-bottom: var(--spacing-md);
+}
+
+/* Button - Same as Agent Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: 12px 24px;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all var(--transition);
+    white-space: nowrap;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #1a1a1a;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+    color: white;
+}
+
+.btn-glass {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.btn-glass:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+    color: white;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--spacing-lg);
+}
+
+.stat-icon {
+    font-size: 32px;
+    margin-bottom: var(--spacing-sm);
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary);
+    margin: var(--spacing-xs) 0;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: var(--on-surface-variant);
+    font-weight: 500;
+}
+
+/* Transaction Filters */
+.transaction-filters {
+    display: flex;
+    gap: var(--spacing-xs);
+    align-items: center;
+}
+
+.filter-btn {
+    background: transparent;
+    border: 1px solid var(--outline);
+    color: var(--on-surface-variant);
+    padding: 8px 0;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition);
+    width: 50px;
+    min-width: 50px;
+    max-width: 50px;
+    text-align: center;
+    white-space: nowrap;
+    flex-shrink: 0;
+    flex-grow: 0;
+    box-sizing: border-box;
+    display: inline-block;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* Transaction Controls */
+.transaction-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--outline);
+}
+
+.transaction-summary {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.summary-text {
+    font-size: 14px;
+    color: var(--on-surface-variant);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--outline);
+    color: var(--on-surface);
+}
+
+.btn-outline:hover {
+    background: var(--surface-variant);
+    border-color: var(--primary);
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+/* Enhanced Transaction List */
+.transaction-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.transaction-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--outline);
+    transition: all var(--transition);
+    opacity: 1;
+}
+
+.transaction-item:last-child {
+    border-bottom: none;
+}
+
+.transaction-item:hover {
+    background: var(--surface-variant);
+    transform: translateX(2px);
+}
+
+.transaction-item.hidden {
+    display: none;
+}
+
+/* Transaction Icons */
+.transaction-icon {
+    flex-shrink: 0;
+}
+
+.icon-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.icon-circle.positive {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--primary);
+}
+
+.icon-circle.negative {
+    background: rgba(107, 114, 128, 0.1);
+    color: var(--on-surface-variant);
+}
+
+/* Transaction Info */
+.transaction-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.transaction-description {
+    font-weight: 600;
+    color: var(--on-surface);
+    font-size: 14px;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px;
+}
+
+.transaction-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+.transaction-date {
+    font-size: 12px;
+    color: var(--on-surface-variant);
+}
+
+.transaction-type {
+    font-size: 11px;
+    color: var(--on-surface-variant);
+    background: var(--surface-variant);
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Transaction Amount */
+.transaction-amount {
+    font-weight: 700;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
+}
+
+.transaction-amount.positive {
+    color: var(--primary);
+}
+
+.transaction-amount.negative {
+    color: var(--on-surface-variant);
+}
+
+.amount-prefix {
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+/* Transaction Footer */
+.transaction-footer {
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--outline);
+    text-align: center;
+}
+
+/* Sidebar - Same as Agent Sidebar */
+.wallet-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+/* Quick Actions Card */
+.quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background: var(--surface-variant);
+    border: 1px solid var(--outline);
+    border-radius: var(--radius-sm);
+    color: var(--on-surface);
+    text-decoration: none;
+    transition: all var(--transition);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.action-btn:hover {
+    background: var(--surface);
+    border-color: var(--outline-variant);
+    transform: translateY(-1px);
+    color: var(--on-surface);
+}
+
+/* Empty State & Loading States */
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--on-surface-variant);
+}
+
+.empty-icon {
+    font-size: 48px;
+    margin-bottom: var(--spacing-md);
+    opacity: 0.5;
+}
+
+.empty-text {
+    font-size: 16px;
+    margin: 0;
+}
+
+/* Skeleton Loading States */
+.skeleton {
+    background: linear-gradient(90deg, var(--surface-variant) 25%, var(--surface) 50%, var(--surface-variant) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    border-radius: var(--radius-sm);
+}
+
+@keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.skeleton-text {
+    height: 1em;
+    margin-bottom: 0.5em;
+}
+
+.skeleton-text.short { width: 60%; }
+.skeleton-text.medium { width: 80%; }
+.skeleton-text.long { width: 100%; }
+
+.skeleton-stat {
+    height: 60px;
+    margin-bottom: var(--spacing-sm);
+}
+
+.skeleton-transaction {
+    height: 60px;
+    margin-bottom: var(--spacing-xs);
+}
+
+/* Loading overlay */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.loading-spinner {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--outline);
+    border-top: 2px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Error state */
+.error-state {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--error);
+    background: rgba(239, 68, 68, 0.05);
+    border-radius: var(--radius-sm);
+}
+
+/* Enhanced Responsive Design */
+@media (max-width: 1024px) {
+    .wallet-container {
+        grid-template-columns: 1fr 300px;
+        gap: var(--spacing-md);
+    }
+}
+
+@media (max-width: 768px) {
+    .wallet-page {
+        padding: var(--spacing-md);
+    }
+    
+    .wallet-container {
+        grid-template-columns: 1fr 280px;
+        gap: var(--spacing-md);
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--spacing-sm);
+    }
+    
+    .stat-item {
+        padding: var(--spacing-md);
+    }
+    
+    .transaction-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
+    
+    .transaction-amount {
+        align-self: flex-end;
+    }
+    
+    .balance-amount {
+        font-size: 32px;
+    }
+    
+    .transaction-filters {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .card-header {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 600px) {
+    .wallet-container {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .wallet-sidebar {
+        order: -1;
+    }
+}
+
+@media (max-width: 480px) {
+    .wallet-page {
+        padding: var(--spacing-sm);
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .balance-amount {
+        font-size: 28px;
+    }
+    
+    .filter-btn {
+        width: 60px;
+        font-size: 11px;
+    }
+    
+    .transaction-icon {
+        display: none;
+    }
+    
+    .transaction-description {
+        max-width: 200px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="wallet-page theme-professional">
+    <div class="wallet-container">
+        <!-- Main Content -->
+        <main class="wallet-main" role="main">
+            <!-- Balance Card -->
+            <section class="card balance-card" aria-labelledby="balance-heading">
+                <div class="card-content">
+                    <h2 id="balance-heading" class="balance-label">💰 Current Balance</h2>
+                    <div class="balance-amount" aria-live="polite" data-wallet-balance>{{ current_balance|floatformat:2 }} AED</div>
+                    <a href="{% url 'wallet:wallet_topup' %}" 
+                       class="btn btn-primary" 
+                       style="background: white; color: black; border: 1px solid rgba(255,255,255,0.2);"
+                       aria-label="Top up wallet balance">
+                        💳 Top Up Wallet
+                    </a>
+                </div>
+            </section>
+            
+            <!-- Statistics Card -->
+            <section class="card" aria-labelledby="stats-heading">
+                <div class="card-header">
+                    <h3 id="stats-heading" class="section-title">📊 Wallet Statistics</h3>
+                </div>
+                <div class="card-content">
+                    <div class="stats-grid" role="group" aria-label="Wallet statistics">
+                        <div class="stat-item">
+                            <div class="stat-icon" aria-hidden="true">💸</div>
+                            <div class="stat-value" aria-label="Total spent: {{ total_spent|floatformat:2 }} AED">{{ total_spent|floatformat:2 }} AED</div>
+                            <div class="stat-label">Total Spent</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon" aria-hidden="true">💵</div>
+                            <div class="stat-value" aria-label="Total topped up: {{ total_topped_up|floatformat:2 }} AED">{{ total_topped_up|floatformat:2 }} AED</div>
+                            <div class="stat-label">Total Topped Up</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon" aria-hidden="true">📋</div>
+                            <div class="stat-value" aria-label="Total transactions: {{ transactions|length }}">{{ transactions|length }}</div>
+                            <div class="stat-label">Total Transactions</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Transactions Card -->
+            <section class="card" aria-labelledby="transactions-heading">
+                <div class="card-header">
+                    <h3 id="transactions-heading" class="section-title">📋 Recent Transactions</h3>
+                    <div class="transaction-filters" role="group" aria-label="Filter transactions">
+                        <button class="filter-btn active" 
+                                data-filter="all" 
+                                aria-pressed="true"
+                                aria-label="Show all transactions">All</button>
+                        <button class="filter-btn" 
+                                data-filter="top_up" 
+                                aria-pressed="false"
+                                aria-label="Show deposit transactions">Add</button>
+                        <button class="filter-btn" 
+                                data-filter="usage" 
+                                aria-pressed="false"
+                                aria-label="Show spending transactions">Use</button>
+                    </div>
+                </div>
+                <div class="card-content">
+                    {% if transactions %}
+                        <div class="transaction-controls">
+                            <div class="transaction-summary">
+                                <span class="summary-text">Showing <span id="visible-count">{{ transactions|length }}</span> of {{ transactions|length }} transactions</span>
+                                <button class="btn btn-outline btn-sm" onclick="exportTransactions()">📊 Export</button>
+                            </div>
+                        </div>
+                        <div class="transaction-list" id="transaction-list">
+                            {% for transaction in transactions %}
+                                <div class="transaction-item" data-type="{{ transaction.type }}" data-date="{{ transaction.created_at|date:'Y-m-d' }}">
+                                    <div class="transaction-icon">
+                                        {% if transaction.type == 'top_up' %}
+                                            <div class="icon-circle positive">💳</div>
+                                        {% else %}
+                                            <div class="icon-circle negative">🤖</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="transaction-info">
+                                        <div class="transaction-description" title="{{ transaction.description }}">
+                                            {% if transaction.description|length > 40 %}
+                                                {{ transaction.description|truncatechars:40 }}
+                                            {% else %}
+                                                {{ transaction.description }}
+                                            {% endif %}
+                                        </div>
+                                        <div class="transaction-meta">
+                                            <span class="transaction-date">{{ transaction.created_at|date:"M d, Y H:i" }}</span>
+                                            <span class="transaction-type">{{ transaction.get_type_display|default:transaction.type|title }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="transaction-amount {% if transaction.type == 'top_up' %}positive{% else %}negative{% endif %}">
+                                        {% if transaction.type == 'top_up' %}
+                                            <span class="amount-prefix">+</span>{{ transaction.amount|floatformat:2 }} AED
+                                        {% else %}
+                                            <span class="amount-prefix">-</span>{{ transaction.amount|floatformat:2|cut:"-" }} AED
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <!-- Load More Button -->
+                        <div class="transaction-footer">
+                            <button class="btn btn-outline" onclick="loadMoreTransactions()">
+                                📄 Load More Transactions
+                            </button>
+                        </div>
+                    {% else %}
+                        <div class="empty-state">
+                            <div class="empty-icon">📭</div>
+                            <p class="empty-text">No transactions yet. Start using AI agents to see your transaction history!</p>
+                            <a href="{% url 'agents:marketplace' %}" class="btn btn-primary">🤖 Browse Agents</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </section>
+        </main>
+        
+        <!-- Sidebar -->
+        <div class="wallet-sidebar">
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="section-title">⚡ Quick Actions</h3>
+                </div>
+                <div class="card-content">
+                    <div class="quick-actions">
+                        <a href="{% url 'wallet:wallet_topup' %}" class="action-btn">
+                            💳 Top Up Wallet
+                        </a>
+                        <a href="{% url 'agents:marketplace' %}" class="action-btn">
+                            🤖 Browse Agents
+                        </a>
+                        <a href="{% url 'core:homepage' %}" class="action-btn">
+                            🏠 Back to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Wallet Info -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="section-title">ℹ️ Wallet Info</h3>
+                </div>
+                <div class="card-content">
+                    <div style="font-size: 14px; color: var(--on-surface-variant); line-height: 1.6;">
+                        <p><strong>How it works:</strong></p>
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li>Top up your wallet with AED</li>
+                            <li>Use AI agents for various tasks</li>
+                            <li>Pay only for successful results</li>
+                            <li>Track all transactions here</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Optimized Wallet Transaction Manager
+class WalletTransactionManager {
+    constructor() {
+        try {
+            this.allTransactions = Array.from(document.querySelectorAll('.transaction-item'));
+            this.visibleCount = document.getElementById('visible-count');
+            this.filterButtons = document.querySelectorAll('.filter-btn');
+            this.currentFilter = 'all';
+            
+            // Performance optimization: Cache DOM queries
+            this.transactionList = document.getElementById('transaction-list');
+            
+            this.init();
+        } catch (error) {
+            console.error('Failed to initialize WalletTransactionManager:', error);
+            this.showErrorState();
+        }
+    }
+    
+    init() {
+        if (this.allTransactions.length === 0) {
+            console.warn('No transactions found');
+            return;
+        }
+        
+        this.setupFilters();
+        this.updateVisibleCount();
+        this.addKeyboardNavigation();
+    }
+    
+    showErrorState() {
+        const container = document.querySelector('.transaction-list');
+        if (container) {
+            container.innerHTML = '<div class="error-state">Unable to load transactions. Please refresh the page.</div>';
+        }
+    }
+    
+    setupFilters() {
+        this.filterButtons.forEach(btn => {
+            btn.addEventListener('click', this.handleFilterClick.bind(this));
+            // Add keyboard support
+            btn.addEventListener('keydown', this.handleFilterKeydown.bind(this));
+        });
+    }
+    
+    handleFilterClick(e) {
+        try {
+            const filter = e.target.getAttribute('data-filter');
+            if (filter === this.currentFilter) return; // Avoid unnecessary work
+            
+            this.setActiveFilter(e.target);
+            this.filterTransactions(filter);
+            this.currentFilter = filter;
+        } catch (error) {
+            console.error('Filter error:', error);
+            this.showToast('Filter failed. Please try again.', 'error');
+        }
+    }
+    
+    handleFilterKeydown(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.handleFilterClick(e);
+        }
+    }
+    
+    setActiveFilter(activeButton) {
+        // Update ARIA states and visual states
+        this.filterButtons.forEach(btn => {
+            const isActive = btn === activeButton;
+            btn.classList.toggle('active', isActive);
+            btn.setAttribute('aria-pressed', isActive.toString());
+        });
+    }
+    
+    addKeyboardNavigation() {
+        // Arrow key navigation for filter buttons
+        this.filterButtons.forEach((btn, index) => {
+            btn.addEventListener('keydown', (e) => {
+                let targetIndex = index;
+                
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        targetIndex = index > 0 ? index - 1 : this.filterButtons.length - 1;
+                        break;
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        targetIndex = index < this.filterButtons.length - 1 ? index + 1 : 0;
+                        break;
+                    default:
+                        return;
+                }
+                
+                this.filterButtons[targetIndex].focus();
+            });
+        });
+    }
+    
+    filterTransactions(filter) {
+        this.allTransactions.forEach(transaction => {
+            const type = transaction.getAttribute('data-type');
+            let shouldShow = false;
+            
+            switch(filter) {
+                case 'all':
+                    shouldShow = true;
+                    break;
+                case 'top_up':
+                    shouldShow = type === 'top_up';
+                    break;
+                case 'usage':
+                    shouldShow = type !== 'top_up';
+                    break;
+                default:
+                    shouldShow = true;
+            }
+            
+            if (shouldShow) {
+                transaction.classList.remove('hidden');
+                transaction.style.display = 'flex';
+            } else {
+                transaction.classList.add('hidden');
+                transaction.style.display = 'none';
+            }
+        });
+        
+        this.updateVisibleCount();
+        this.animateFilterChange();
+    }
+    
+    updateVisibleCount() {
+        const visibleTransactions = this.allTransactions.filter(t => !t.classList.contains('hidden'));
+        if (this.visibleCount) {
+            this.visibleCount.textContent = visibleTransactions.length;
+        }
+    }
+    
+    animateFilterChange() {
+        const transactionList = document.getElementById('transaction-list');
+        if (transactionList) {
+            transactionList.style.opacity = '0.7';
+            setTimeout(() => {
+                transactionList.style.opacity = '1';
+            }, 150);
+        }
+    }
+}
+
+// Export Transactions Function
+function exportTransactions() {
+    const visibleTransactions = Array.from(document.querySelectorAll('.transaction-item:not(.hidden)'));
+    
+    if (visibleTransactions.length === 0) {
+        showToast('No transactions to export', 'info');
+        return;
+    }
+    
+    // Create CSV content
+    let csvContent = 'Date,Description,Type,Amount (AED)\n';
+    
+    visibleTransactions.forEach(transaction => {
+        const date = transaction.querySelector('.transaction-date').textContent;
+        const description = transaction.querySelector('.transaction-description').textContent;
+        const type = transaction.querySelector('.transaction-type')?.textContent || 'Unknown';
+        const amount = transaction.querySelector('.transaction-amount').textContent.replace(/[^\d.-]/g, '');
+        
+        csvContent += `"${date}","${description}","${type}","${amount}"\n`;
+    });
+    
+    // Download CSV
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `wallet-transactions-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    showToast('✅ Transactions exported successfully!', 'success');
+}
+
+// Load More Transactions Function
+function loadMoreTransactions() {
+    // This would typically make an AJAX call to load more transactions
+    // For now, we'll show a placeholder message
+    showToast('📄 Loading more transactions...', 'info');
+    
+    setTimeout(() => {
+        showToast('All transactions loaded', 'info');
+    }, 1500);
+}
+
+// Toast Notification System
+function showToast(message, type = 'info') {
+    // Remove existing toasts
+    const existingToast = document.querySelector('.wallet-toast');
+    if (existingToast) {
+        existingToast.remove();
+    }
+    
+    // Create toast
+    const toast = document.createElement('div');
+    toast.className = `wallet-toast toast-${type}`;
+    toast.innerHTML = `
+        <div class="toast-content">
+            <span class="toast-message">${message}</span>
+            <button class="toast-close" onclick="this.parentElement.parentElement.remove()">×</button>
+        </div>
+    `;
+    
+    // Toast styles
+    toast.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#6b7280'};
+        color: white;
+        padding: 12px 16px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        z-index: 1000;
+        font-size: 14px;
+        font-weight: 500;
+        max-width: 300px;
+        animation: slideInRight 0.3s ease;
+    `;
+    
+    // Add animation keyframes
+    if (!document.querySelector('#toast-styles')) {
+        const style = document.createElement('style');
+        style.id = 'toast-styles';
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            .toast-content {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+            }
+            .toast-close {
+                background: none;
+                border: none;
+                color: white;
+                cursor: pointer;
+                font-size: 18px;
+                font-weight: bold;
+                opacity: 0.8;
+            }
+            .toast-close:hover {
+                opacity: 1;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    document.body.appendChild(toast);
+    
+    // Auto remove after 3 seconds
+    setTimeout(() => {
+        if (document.body.contains(toast)) {
+            toast.remove();
+        }
+    }, 3000);
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    if (document.querySelector('.transaction-item')) {
+        new WalletTransactionManager();
+    }
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+    // Ctrl/Cmd + E for export
+    if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
+        e.preventDefault();
+        exportTransactions();
+    }
+});
+</script>
+{% endblock %}

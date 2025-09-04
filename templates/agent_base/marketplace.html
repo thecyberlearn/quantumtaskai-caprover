@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}AI Marketplace - Quantum Tasks AI{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/marketplace.css' %}">
+{% endblock %}
+
+{% block content %}
+<style>
+/* Override main-container for marketplace full-width sections */
+.main-container {
+    max-width: none;
+    padding: 0;
+}
+</style>
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-container">
+        <h1 class="hero-title">
+            <span class="gradient-text">AI Assistants</span><br>
+            <span>Ready to Use</span>
+        </h1>
+
+        <!-- Search -->
+        <div class="search-container">
+            <form method="GET" action="{% url 'agent_base:marketplace' %}" class="search-wrapper">
+                {% if selected_category %}
+                    <input type="hidden" name="category" value="{{ selected_category }}">
+                {% endif %}
+                <input type="text" name="search" placeholder="Search AI assistants..." class="search-input" id="search-input" value="{{ search_query }}" maxlength="100">
+                <button type="submit" class="search-button">
+                    <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </button>
+            </form>
+        </div>
+
+        <!-- Category Filters -->
+        <div class="category-filters">
+            <a href="{% url 'agent_base:marketplace' %}{% if search_query %}?search={{ search_query }}{% endif %}" class="category-button {% if not selected_category %}active{% endif %}" data-category="all">
+                <span class="category-emoji">🤖</span> All Assistants
+            </a>
+            {% if categories %}
+                {% for category_value, category_display in categories %}
+                    <a href="{% url 'agent_base:marketplace' %}?category={{ category_value }}{% if search_query %}&search={{ search_query }}{% endif %}" 
+                       class="category-button {% if selected_category == category_value %}active{% endif %}" 
+                       data-category="{{ category_value }}">
+                        <span class="category-emoji">
+                            {% if category_value == 'customer-service' %}💬
+                            {% elif category_value == 'analytics' %}📊
+                            {% elif category_value == 'content' %}📝
+                            {% elif category_value == 'email' %}📧
+                            {% elif category_value == 'utilities' %}🔧
+                            {% elif category_value == 'sales' %}💰
+                            {% elif category_value == 'marketing' %}📈
+                            {% else %}🤖
+                            {% endif %}
+                        </span> {{ category_display|title }}
+                    </a>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Assistants Grid Section -->
+<section class="assistants-section">
+    <div class="assistants-container">
+        {% if agents %}
+            <div class="assistants-grid" id="assistants-grid">
+                {% for agent in agents %}
+                    <div class="agent-card" data-category="{{ agent.category }}">
+                        <div class="agent-header">
+                            <div class="agent-avatar {% cycle 'gradient-blue' 'gradient-green' 'gradient-slate' 'gradient-neutral' %}">
+                                {% if agent.icon %}{{ agent.icon }}{% else %}{{ agent.name|first|upper }}{% endif %}
+                            </div>
+                            <div class="agent-info">
+                                <h3 class="agent-name">{{ agent.name }}</h3>
+                                <div class="agent-rating">
+                                    <span class="rating-star">⭐</span>
+                                    <span class="rating-text">{% if agent.rating %}{{ agent.rating }}{% else %}4.8{% endif %} ({% if agent.review_count %}{{ agent.review_count }}{% else %}{{ agent.name|length|add:100 }}{% endif %} reviews)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="agent-description">{{ agent.description }}</p>
+                        <div class="agent-tags">
+                            <span class="agent-tag category-{{ agent.category }}">{{ agent.category|title }}</span>
+                        </div>
+                        <div class="agent-footer">
+                            <div class="agent-price">
+                                <span class="price-icon">💰</span>
+                                <span class="price-text">{{ agent.price }} AED</span>
+                            </div>
+                            {% if user.is_authenticated %}
+                                <a href="{{ agent.get_absolute_url }}" class="use-button">Use Now</a>
+                            {% else %}
+                                <a href="{% url 'authentication:login' %}?next={{ agent.get_absolute_url }}" class="use-button">Login to Use</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <!-- Empty State -->
+            <div class="empty-state" id="empty-state">
+                <div class="state-icon">🔍</div>
+                <p class="state-text">No assistants found{% if selected_category %} in the {{ selected_category }} category{% endif %}. Check back later!</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Search and Filter Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('search-input');
+    const categoryButtons = document.querySelectorAll('.category-button');
+    const agentCards = document.querySelectorAll('.agent-card');
+    const emptyState = document.getElementById('empty-state');
+    const assistantsGrid = document.getElementById('assistants-grid');
+
+    let currentCategory = '{% if selected_category %}{{ selected_category }}{% else %}all{% endif %}';
+    let currentSearch = '';
+
+    // Search functionality
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            currentSearch = this.value.toLowerCase();
+            filterAgents();
+        });
+    }
+
+    // Category filter functionality (for JavaScript filtering, not navigation)
+    categoryButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            // Only prevent default if it's not a navigation link
+            if (this.dataset.category) {
+                e.preventDefault();
+                
+                // Remove active class from all buttons
+                categoryButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                currentCategory = this.dataset.category;
+                filterAgents();
+            }
+        });
+    });
+
+    // Filter agents based on search and category
+    function filterAgents() {
+        if (!agentCards.length) return;
+        
+        let visibleCount = 0;
+
+        agentCards.forEach(card => {
+            const category = card.dataset.category;
+            const name = card.querySelector('.agent-name').textContent.toLowerCase();
+            const description = card.querySelector('.agent-description').textContent.toLowerCase();
+
+            const matchesCategory = currentCategory === 'all' || category === currentCategory;
+            const matchesSearch = currentSearch === '' || 
+                                name.includes(currentSearch) || 
+                                description.includes(currentSearch);
+
+            if (matchesCategory && matchesSearch) {
+                card.style.display = 'flex';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Show/hide empty state
+        if (emptyState && assistantsGrid) {
+            if (visibleCount === 0) {
+                emptyState.style.display = 'block';
+                assistantsGrid.style.display = 'none';
+            } else {
+                emptyState.style.display = 'none';
+                assistantsGrid.style.display = 'grid';
+            }
+        }
+    }
+
+    // Initialize filter on page load
+    filterAgents();
+});
+</script>
+{% endblock %}

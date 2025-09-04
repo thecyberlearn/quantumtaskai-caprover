@@ -1,0 +1,244 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Sign In{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/agent-base.css' %}">
+<style>
+    /* Override main-container for full-width sections */
+    .main-container {
+        max-width: none;
+        padding: 0;
+    }
+    
+    /* Login page using agent-base.css */
+    .login-page {
+        background: var(--background);
+        min-height: calc(100vh - 84px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--spacing-lg);
+    }
+    
+    .login-container {
+        background: var(--surface);
+        border-radius: var(--radius-lg);
+        padding: 48px;
+        box-shadow: var(--shadow-lg);
+        width: 100%;
+        max-width: 450px;
+        border: 1px solid var(--outline);
+    }
+    
+    .login-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .login-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--on-surface);
+        margin: 0 0 var(--spacing-sm) 0;
+    }
+    
+    .login-subtitle {
+        font-size: 16px;
+        color: var(--on-surface-variant);
+        margin: 0;
+    }
+    
+    .login-btn {
+        width: 100%;
+        margin-bottom: 32px;
+        margin-top: 8px;
+    }
+    
+    .messages {
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .message {
+        padding: var(--spacing-md);
+        border-radius: var(--radius-sm);
+        margin-bottom: var(--spacing-sm);
+        font-size: 14px;
+        font-weight: 500;
+        border: 1px solid;
+    }
+    
+    .message.success {
+        background: var(--surface-variant);
+        color: var(--on-surface);
+        border-color: var(--outline);
+    }
+    
+    .message.error {
+        background: var(--surface-variant);
+        color: var(--on-surface);
+        border-color: var(--outline);
+    }
+    
+    .login-auth-links {
+        text-align: center;
+        padding-top: 24px;
+        border-top: 1px solid var(--outline);
+    }
+    
+    .login-auth-links p {
+        margin: var(--spacing-sm) 0;
+        color: var(--on-surface-variant);
+        font-size: 14px;
+    }
+    
+    .login-auth-links a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 600;
+        transition: all var(--transition);
+    }
+    
+    .login-auth-links a:hover {
+        text-decoration: underline;
+    }
+    
+    .verification-actions {
+        text-align: center;
+        margin-bottom: var(--spacing-lg);
+        padding: var(--spacing-md);
+        background: var(--surface-variant);
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--outline);
+    }
+    
+    .verification-text {
+        margin: 0 0 var(--spacing-sm) 0;
+        color: var(--on-surface-variant);
+        font-size: 14px;
+    }
+    
+    .btn-outline {
+        background: transparent;
+        border: 1px solid var(--primary);
+        color: var(--primary);
+    }
+    
+    .btn-outline:hover {
+        background: var(--primary);
+        color: var(--on-primary);
+    }
+    
+    .btn-sm {
+        padding: var(--spacing-xs) var(--spacing-md);
+        font-size: 14px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 480px) {
+        .login-page {
+            padding: var(--spacing-md);
+        }
+        
+        .login-container {
+            padding: 32px 24px;
+        }
+        
+        .login-title {
+            font-size: 24px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-page theme-professional">
+    <div class="login-container">
+        <div class="login-header">
+            <h1 class="login-title">Welcome Back</h1>
+            <p class="login-subtitle">Sign in to your account</p>
+        </div>
+        
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        {% if show_resend_verification %}
+            <div class="verification-actions">
+                <p class="verification-text">Need to resend verification email?</p>
+                <a href="{% url 'authentication:resend_verification' %}" class="btn btn-outline btn-sm">Resend Verification</a>
+            </div>
+        {% endif %}
+        
+        <form method="post" class="login-form">
+            {% csrf_token %}
+            {% if request.GET.next %}
+                <input type="hidden" name="next" value="{{ request.GET.next }}">
+            {% endif %}
+            
+            <div class="form-group">
+                <label for="email" class="form-label">Email Address</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    class="form-input"
+                    placeholder="Enter your email"
+                    required
+                    autocomplete="email"
+                >
+            </div>
+            
+            <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    class="form-input"
+                    placeholder="Enter your password"
+                    required
+                    autocomplete="current-password"
+                >
+            </div>
+            
+            <button type="submit" class="btn btn-primary login-btn">
+                Sign In
+            </button>
+        </form>
+        
+        <div class="login-auth-links">
+            <p><a href="{% url 'authentication:forgot_password' %}">Forgot your password?</a></p>
+            <p>Don't have an account? <a href="{% url 'authentication:register' %}">Create account</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const emailField = document.getElementById('email');
+        const loginForm = document.querySelector('.login-form');
+        const loginBtn = document.querySelector('.login-btn');
+        
+        // Focus on email field
+        if (emailField) {
+            emailField.focus();
+        }
+        
+        // Form submission
+        if (loginForm && loginBtn) {
+            loginForm.addEventListener('submit', function() {
+                loginBtn.innerHTML = 'Signing in...';
+                loginBtn.disabled = true;
+            });
+        }
+    });
+</script>
+{% endblock %}

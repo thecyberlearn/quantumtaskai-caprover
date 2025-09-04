@@ -1,0 +1,25 @@
+{
+  "slug": "five-whys-analysis",
+  "name": "5 Whys Analysis",
+  "short_description": "Interactive problem-solving using the proven 5 Whys methodology",
+  "description": "Systematically find root causes through guided 5 Whys methodology. Perfect for troubleshooting operational problems, understanding failures, and identifying systemic issues.",
+  "category": "analysis",
+  "price": 15.0,
+  "agent_type": "chat",
+  "system_type": "webhook",
+  "form_schema": {
+    "fields": [
+      {
+        "name": "problem_description",
+        "type": "textarea",
+        "label": "Describe the problem you want to analyze",
+        "placeholder": "Describe the issue, failure, or problem you're experiencing",
+        "required": true,
+        "rows": 4
+      }
+    ]
+  },
+  "webhook_url": "http://localhost:5678/webhook/5-whys-web",
+  "access_url_name": "",
+  "display_url_name": ""
+}

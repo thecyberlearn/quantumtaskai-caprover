@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ agent.name }} - Quantum Tasks AI</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .agent-detail { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .agent-header { display: flex; align-items: center; margin-bottom: 20px; }
+        .agent-icon { font-size: 3em; margin-right: 20px; }
+        .agent-info h1 { margin: 0; }
+        .agent-price { color: #007bff; font-size: 1.5em; font-weight: bold; margin: 10px 0; }
+        .agent-rating { color: #ffa500; font-size: 1.1em; }
+        .user-balance { background: #e8f5e8; padding: 10px; border-radius: 5px; margin: 20px 0; }
+        .insufficient-balance { background: #ffe6e6; padding: 10px; border-radius: 5px; margin: 20px 0; color: #cc0000; }
+        .agent-form { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
+        .form-group textarea { height: 100px; resize: vertical; }
+        .btn { padding: 12px 24px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; }
+        .btn:hover { background: #0056b3; }
+        .btn:disabled { background: #ccc; cursor: not-allowed; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #007bff; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        .recent-usage { margin-top: 30px; }
+        .usage-item { background: #f8f9fa; padding: 10px; margin: 5px 0; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{% url 'homepage' %}" class="back-link">← Back to Homepage</a>
+        
+        <div class="agent-detail">
+            <div class="agent-header">
+                <div class="agent-icon">{{ agent.icon }}</div>
+                <div class="agent-info">
+                    <h1>{{ agent.name }}</h1>
+                    <div class="agent-price">{{ agent.price }} AED</div>
+                    <div class="agent-rating">★ {{ agent.rating }} ({{ agent.review_count }} reviews)</div>
+                </div>
+            </div>
+            
+            <p>{{ agent.description }}</p>
+            
+            {% if user.is_authenticated %}
+                <div class="user-balance">
+                    Your Balance: {{ user_balance }} AED
+                </div>
+                
+                {% if can_use_agent %}
+                    <div class="agent-form">
+                        <h3>Use {{ agent.name }}</h3>
+                        <form method="post" action="{% url 'use_agent' agent.slug %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            
+                            {% if agent.slug == 'data-analyzer' %}
+                                <div class="form-group">
+                                    <label for="file">Upload Data File:</label>
+                                    <input type="file" id="file" name="file" accept=".csv,.xlsx,.json" required>
+                                </div>
+                            {% elif agent.slug == 'five-whys' %}
+                                <div class="form-group">
+                                    <label for="problem">Problem Description:</label>
+                                    <textarea id="problem" name="problem" placeholder="Describe the problem you want to analyze..." required></textarea>
+                                </div>
+                            {% elif agent.slug == 'weather-reporter' %}
+                                <div class="form-group">
+                                    <label for="location">Location:</label>
+                                    <input type="text" id="location" name="location" placeholder="Enter city name or coordinates" required>
+                                </div>
+                            {% elif agent.slug == 'job-posting-generator' %}
+                                <div class="form-group">
+                                    <label for="job_details">Job Details:</label>
+                                    <textarea id="job_details" name="job_details" placeholder="Enter job title, requirements, company info..." required></textarea>
+                                </div>
+                            {% elif agent.slug == 'social-ads-generator' %}
+                                <div class="form-group">
+                                    <label for="ad_requirements">Ad Requirements:</label>
+                                    <textarea id="ad_requirements" name="ad_requirements" placeholder="Describe your product/service, target audience, goals..." required></textarea>
+                                </div>
+                            {% elif agent.slug == 'faq-generator' %}
+                                <div class="form-group">
+                                    <label for="content_source">Content Source:</label>
+                                    <textarea id="content_source" name="content_source" placeholder="Paste your content, documentation, or product information..." required></textarea>
+                                </div>
+                            {% endif %}
+                            
+                            <button type="submit" class="btn">Use Agent ({{ agent.price }} AED)</button>
+                        </form>
+                    </div>
+                {% else %}
+                    <div class="insufficient-balance">
+                        <strong>Insufficient Balance!</strong> You need {{ agent.price }} AED to use this agent.
+                        <a href="{% url 'wallet_topup' %}" style="color: #007bff;">Top up your wallet</a>
+                    </div>
+                {% endif %}
+                
+                {% if recent_usage %}
+                    <div class="recent-usage">
+                        <h3>Your Recent Usage</h3>
+                        {% for usage in recent_usage %}
+                            <div class="usage-item">
+                                <strong>{{ usage.amount }} AED</strong> - {{ usage.description }}
+                                <small>({{ usage.created_at|date:"M d, Y H:i" }})</small>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% else %}
+                <p><a href="{% url 'login' %}">Login</a> to use this agent.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

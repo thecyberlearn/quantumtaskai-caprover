@@ -1,0 +1,49 @@
+{
+  "slug": "social-ads-generator",
+  "name": "Social Ads Generator",
+  "short_description": "Create compelling social media advertisements optimized for different platforms",
+  "description": "Generate engaging social media advertisements with AI-powered content generation. Optimized for Facebook, Instagram, LinkedIn, Twitter, TikTok, and YouTube.",
+  "category": "marketing", 
+  "price": 6.0,
+  "agent_type": "form",
+  "system_type": "webhook",
+  "form_schema": {
+    "fields": [
+      {
+        "name": "description",
+        "type": "textarea",
+        "label": "Describe what you'd like to generate",
+        "placeholder": "Describe the product, service, or campaign",
+        "required": true,
+        "rows": 4
+      },
+      {
+        "name": "social_platform",
+        "type": "select", 
+        "label": "For Social Media Platform",
+        "required": true,
+        "options": [
+          {"value": "", "label": "Select a platform..."},
+          {"value": "facebook", "label": "Facebook"},
+          {"value": "instagram", "label": "Instagram"},
+          {"value": "linkedin", "label": "LinkedIn"},
+          {"value": "twitter", "label": "X (Twitter)"}
+        ]
+      },
+      {
+        "name": "include_emoji",
+        "type": "select",
+        "label": "Include Emoji", 
+        "required": true,
+        "options": [
+          {"value": "", "label": "Select an option..."},
+          {"value": "yes", "label": "Yes"},
+          {"value": "no", "label": "No"}
+        ]
+      }
+    ]
+  },
+  "webhook_url": "http://localhost:5678/webhook/2dc234d8-7217-454a-83e9-81afe5b4fe2d",
+  "access_url_name": "",
+  "display_url_name": ""
+}

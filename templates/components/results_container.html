@@ -1,0 +1,21 @@
+<div class="agent-widget widget-wide results-container" id="resultsContainer" style="display: none;">
+    <div class="widget-header">
+        <h3 class="widget-title">
+            <span class="widget-icon">📊</span>
+            {{ results_title|default:"Results" }}
+        </h3>
+        <span class="status-badge">Success</span>
+    </div>
+
+    <div class="widget-content">
+        <div class="results-content" id="resultsContent">
+            <!-- Results will be populated here by JavaScript -->
+        </div>
+        
+        <div class="results-actions action-buttons">
+            <button onclick="copyResults()" class="btn btn-primary">📋 Copy Results</button>
+            <button onclick="downloadResults()" class="btn btn-secondary">💾 Download</button>
+            <button onclick="resetForm()" class="btn btn-secondary">🔄 New Request</button>
+        </div>
+    </div>
+</div>

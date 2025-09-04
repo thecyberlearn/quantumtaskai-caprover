@@ -1,0 +1,62 @@
+{
+  "slug": "brand-digital-presence-finder",
+  "name": "Brand Digital Presence Finder",
+  "short_description": "Discover your brand's presence across 14 major digital platforms instantly",
+  "description": "Analyze your brand's digital footprint across major social media and business platforms including Google Business, LinkedIn, YouTube, TikTok, Instagram, Pinterest, X (Twitter), Facebook, Medium, Tumblr, Threads, Quora, Reddit, and Blue Sky. Get instant insights into where your brand exists online and discover new opportunities for digital presence expansion.",
+  "category": "marketing", 
+  "price": 0.0,
+  "agent_type": "form",
+  "system_type": "webhook",
+  "form_schema": {
+    "fields": [
+      {
+        "name": "brand_name",
+        "type": "text",
+        "label": "Brand Name",
+        "placeholder": "Enter your brand name (e.g., Tesla)",
+        "required": true,
+        "maxlength": 100,
+        "validation": {
+          "minLength": 2,
+          "pattern": "^[a-zA-Z0-9\\s\\-\\.&']+$",
+          "message": "Brand name should contain only letters, numbers, spaces, hyphens, dots, and apostrophes"
+        }
+      },
+      {
+        "name": "website_url",
+        "type": "url",
+        "label": "Website URL",
+        "placeholder": "https://www.example.com",
+        "required": true,
+        "validation": {
+          "pattern": "^https?:\\/\\/(www\\.)?[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\\.[a-zA-Z]{2,}$",
+          "message": "Please enter a valid website URL (e.g., https://www.example.com)"
+        }
+      }
+    ]
+  },
+  "webhook_url": "internal://brand-presence-analysis",
+  "access_url_name": "",
+  "display_url_name": "",
+  "expected_response_format": {
+    "platforms": [
+      {
+        "name": "Google Business",
+        "found": true,
+        "profile_url": "https://...",
+        "status": "verified"
+      },
+      {
+        "name": "LinkedIn",
+        "found": false,
+        "recommendation": "Create a LinkedIn Company Page to establish professional presence"
+      }
+    ],
+    "summary": {
+      "total_platforms": 14,
+      "found_count": 8,
+      "missing_count": 6,
+      "completion_percentage": 57
+    }
+  }
+}

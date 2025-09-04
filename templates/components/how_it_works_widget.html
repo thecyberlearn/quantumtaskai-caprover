@@ -1,0 +1,59 @@
+<div class="agent-widget widget-small" style="min-width: min(280px, 100%); max-width: min(280px, 100%); margin-left: auto;">
+    <div class="widget-header">
+        <h3 class="widget-title">
+            <span class="widget-icon">ℹ️</span>
+            How It Works
+        </h3>
+    </div>
+    <div class="widget-content">
+        {% if steps == "data" %}
+            <ol class="info-list">
+                <li>Upload your data file</li>
+                <li>Choose analysis type</li>
+                <li>Get AI-powered insights</li>
+                <li>Copy or download results</li>
+            </ol>
+        {% elif steps == "weather" %}
+            <ol class="info-list">
+                <li>Enter any city name worldwide</li>
+                <li>Choose your preferred report type</li>
+                <li>Get real-time weather data</li>
+                <li>Copy or download detailed reports</li>
+            </ol>
+        {% elif steps == "social_ads" %}
+            <ol class="info-list">
+                <li>Choose your platform and language</li>
+                <li>Describe your content and audience</li>
+                <li>Get AI-generated social ads</li>
+                <li>Copy or download your campaigns</li>
+            </ol>
+        {% elif steps == "job_posting" %}
+            <ol class="info-list">
+                <li>Enter job title and company details</li>
+                <li>Describe role and requirements</li>
+                <li>Get professional job posting</li>
+                <li>Copy or download the posting</li>
+            </ol>
+        {% elif steps == "five_whys" %}
+            <ol class="info-list">
+                <li>Describe your problem clearly</li>
+                <li>Choose analysis language</li>
+                <li>Get Five Whys analysis</li>
+                <li>Copy or download the results</li>
+            </ol>
+        {% else %}
+            <ol class="info-list">
+                <li>Fill in the required information</li>
+                <li>Choose your preferences</li>
+                <li>Get AI-powered results</li>
+                <li>Copy or download output</li>
+            </ol>
+        {% endif %}
+
+        <button class="quick-agent-toggle btn btn-secondary btn-full" onclick="toggleQuickAgents()" 
+                title="Quick access to other agents">
+            <span class="toggle-icon">🚀</span>
+            <span class="toggle-text">Explore Other Agents</span>
+        </button>
+    </div>
+</div>

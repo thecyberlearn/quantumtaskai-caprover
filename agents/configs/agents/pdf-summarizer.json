@@ -1,0 +1,38 @@
+{
+  "slug": "pdf-summarizer",
+  "name": "PDF Summarizer",
+  "short_description": "Extract and summarize content from PDF documents with AI analysis",
+  "description": "Upload PDF documents and get comprehensive AI-powered summaries, key insights, and analysis. Perfect for processing reports and research papers.",
+  "category": "document-processing",
+  "price": 8.0,
+  "agent_type": "form",
+  "system_type": "webhook",
+  "form_schema": {
+    "fields": [
+      {
+        "name": "pdf_file",
+        "type": "file",
+        "label": "Upload PDF Document",
+        "required": true,
+        "accept": ".pdf",
+        "max_size": "10MB"
+      },
+      {
+        "name": "analysis_type",
+        "type": "select",
+        "label": "Analysis Type",
+        "required": true,
+        "default": "summary",
+        "options": [
+          {"value": "", "label": "Select analysis type..."},
+          {"value": "summary", "label": "Document Summary"},
+          {"value": "key_points", "label": "Key Points Extraction"},
+          {"value": "detailed_analysis", "label": "Detailed Analysis"}
+        ]
+      }
+    ]
+  },
+  "webhook_url": "http://localhost:5678/webhook/simple-pdf-processor",
+  "access_url_name": "",
+  "display_url_name": ""
+}

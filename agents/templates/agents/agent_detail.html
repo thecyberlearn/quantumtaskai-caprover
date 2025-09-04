@@ -1,0 +1,301 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ agent.name }} - Quantum Tasks AI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/agent-base.css' %}?v={{ timestamp }}">
+<link rel="stylesheet" href="{% static 'css/agent-detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<script>
+// Set data attributes for JavaScript access
+document.body.setAttribute('data-user-authenticated', '{{ user.is_authenticated|yesno:"true,false" }}');
+document.body.setAttribute('data-agent-price', '{{ agent.price }}');
+document.body.setAttribute('data-agent-id', '{{ agent.id }}');
+document.body.setAttribute('data-agent-slug', '{{ agent.slug }}');
+document.body.setAttribute('data-webhook-url', '{{ agent.webhook_url }}');
+{% if user.is_authenticated %}
+document.body.setAttribute('data-user-balance', '{{ user.wallet_balance }}');
+{% endif %}
+</script>
+
+<div class="agent-container">
+    <!-- Agent Header Component -->
+    {% include "components/agent_header.html" with agent_title=agent.name agent_subtitle=agent.short_description %}
+
+    <!-- Quick Agent Access Panel Component -->
+    {% include "components/quick_agents_panel.html" %}
+
+    <!-- Main Agent Grid -->
+    <div class="agent-grid">
+        <!-- Agent Form Widget -->
+        <div class="agent-widget widget-large" style="flex: 1; margin-right: clamp(0px, var(--spacing-lg), 2vw);">
+            <div class="widget-header">
+                <h3 class="widget-title">
+                    <span class="widget-icon">{{ agent.category.icon }}</span>
+                    {{ agent.name }} Details
+                </h3>
+            </div>
+            <div class="widget-content">
+                {% if agent.access_url_name and agent.display_url_name %}
+                    <!-- Direct Access Agent - External Form -->
+                    <div class="direct-access-info">
+                        <div class="section-container">
+                            <h4 class="section-subtitle">{{ agent.category.icon }} {{ agent.name }} - External Consultation</h4>
+                            <p style="color: #6b7280; margin-bottom: var(--spacing-lg);">
+                                This consultation will redirect you to our specialized external form for personalized guidance.
+                            </p>
+                            
+                            {% if user.is_authenticated %}
+                                {% if agent.price == 0 %}
+                                    <a href="{% url 'agents:direct_access_handler' agent.slug %}" class="btn btn-primary btn-full">
+                                        {{ agent.category.icon }} Start {{ agent.name }} Consultation (FREE)
+                                    </a>
+                                {% elif user.wallet_balance >= agent.price %}
+                                    <a href="{% url 'agents:direct_access_handler' agent.slug %}" class="btn btn-primary btn-full">
+                                        {{ agent.category.icon }} Start {{ agent.name }} Consultation ({{ agent.price }} AED)
+                                    </a>
+                                {% else %}
+                                    <div style="background: #fef2f2; color: #dc2626; padding: var(--spacing-md); border-radius: var(--radius-md); margin-bottom: var(--spacing-md); font-size: 14px; font-weight: 500; text-align: center;">
+                                        Insufficient balance! You need {{ agent.price }} AED.
+                                    </div>
+                                    <a href="{% url 'wallet:wallet' %}" class="btn btn-primary btn-full" style="text-decoration: none;">
+                                        💰 Top Up Wallet
+                                    </a>
+                                {% endif %}
+                            {% else %}
+                                <a href="{% url 'authentication:login' %}" class="btn btn-primary btn-full">
+                                    🔐 Login to Continue
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% else %}
+                    <!-- Webhook Agent - Dynamic Form -->
+                    <form id="agentForm" method="POST" enctype="multipart/form-data" data-agent-id="{{ agent.id }}">
+                    {% csrf_token %}
+                    
+                    <!-- Dynamic Form Fields -->
+                    <div class="section-container">
+                        <h4 class="section-subtitle">{{ agent.category.icon }} {{ agent.name }} Configuration</h4>
+                        
+                        {% for field in agent.form_schema.fields %}
+                            <div class="form-group" data-field-name="{{ field.name }}">
+                                <label class="form-label" for="{{ field.name }}">
+                                    {{ field.label }}{% if field.required %} *{% endif %}
+                                </label>
+                                
+                                {% if field.type == 'textarea' %}
+                                    <textarea 
+                                        id="{{ field.name }}" 
+                                        name="{{ field.name }}" 
+                                        class="form-textarea"
+                                        placeholder="{{ field.placeholder|default:'' }}"
+                                        {% if field.required %}required{% endif %}
+                                        {% if field.rows %}rows="{{ field.rows }}"{% endif %}
+                                    >{{ field.default|default:'' }}</textarea>
+                                
+                                {% elif field.type == 'select' %}
+                                    <select 
+                                        id="{{ field.name }}" 
+                                        name="{{ field.name }}" 
+                                        class="form-input"
+                                        {% if field.required %}required{% endif %}
+                                    >
+                                        {% for option in field.options %}
+                                            <option value="{{ option.value }}" 
+                                                {% if option.value == field.default %}selected{% endif %}>
+                                                {{ option.label }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                
+                                {% elif field.type == 'text' %}
+                                    <input 
+                                        type="text" 
+                                        id="{{ field.name }}" 
+                                        name="{{ field.name }}" 
+                                        class="form-input"
+                                        placeholder="{{ field.placeholder|default:'' }}"
+                                        value="{{ field.default|default:'' }}"
+                                        {% if field.required %}required{% endif %}
+                                    />
+                                
+                                {% elif field.type == 'url' %}
+                                    <input 
+                                        type="url" 
+                                        id="{{ field.name }}" 
+                                        name="{{ field.name }}" 
+                                        class="form-input"
+                                        placeholder="{{ field.placeholder|default:'' }}"
+                                        value="{{ field.default|default:'' }}"
+                                        {% if field.required %}required{% endif %}
+                                    />
+                                
+                                {% elif field.type == 'checkbox' %}
+                                    <label class="checkbox-container">
+                                        <input 
+                                            type="checkbox" 
+                                            id="{{ field.name }}" 
+                                            name="{{ field.name }}" 
+                                            value="true"
+                                            {% if field.default %}checked{% endif %}
+                                        />
+                                        <span class="checkmark"></span>
+                                        {{ field.label }}
+                                    </label>
+                                
+                                {% elif field.type == 'file' %}
+                                    <div class="file-upload-container">
+                                        <input 
+                                            type="file" 
+                                            id="{{ field.name }}" 
+                                            name="{{ field.name }}" 
+                                            class="form-file-input"
+                                            {% if field.accept %}accept="{{ field.accept }}"{% endif %}
+                                            {% if field.required %}required{% endif %}
+                                        />
+                                        <label for="{{ field.name }}" class="file-upload-label">
+                                            <span class="file-upload-icon">📎</span>
+                                            <span class="file-upload-text">Choose file or drag here</span>
+                                            <span class="file-upload-info">
+                                                {% if field.accept %}{{ field.accept }} files{% endif %}
+                                                {% if field.max_size %} • Max {{ field.max_size }}{% endif %}
+                                            </span>
+                                        </label>
+                                        <div class="file-selected" style="display: none;">
+                                            <span class="file-name"></span>
+                                            <button type="button" class="file-remove" onclick="removeFile('{{ field.name }}')">×</button>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                
+                                {% if field.help_text %}
+                                    <div class="form-help">{{ field.help_text }}</div>
+                                {% endif %}
+                                <div id="{{ field.name }}-error" class="form-error" style="display: none;"></div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div style="margin-top: var(--spacing-lg);">
+                        {% if user.is_authenticated %}
+                            {% if user.wallet_balance >= agent.price %}
+                                <button type="submit" class="btn btn-primary btn-full" id="generateBtn">
+                                    {{ agent.category.icon }} Execute {{ agent.name }} ({{ agent.price }} AED)
+                                </button>
+                            {% else %}
+                                <div style="background: #fef2f2; color: #dc2626; padding: var(--spacing-md); border-radius: var(--radius-md); margin-bottom: var(--spacing-md); font-size: 14px; font-weight: 500; text-align: center;">
+                                    Insufficient balance! You need {{ agent.price }} AED.
+                                </div>
+                                <a href="{% url 'wallet:wallet' %}" class="btn btn-primary btn-full" style="text-decoration: none;">
+                                    💰 Top Up Wallet
+                                </a>
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'authentication:login' %}" class="btn btn-primary btn-full">
+                                🔐 Login to Continue
+                            </a>
+                        {% endif %}
+                    </div>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- How It Works Widget -->
+        {% include "components/how_it_works_widget.html" with steps="agents" %}
+    </div>
+
+    <!-- Processing Status Component -->
+    {% include "components/processing_status.html" with status_title="Processing..." status_text="Please wait while we execute your agent..." %}
+    
+    <!-- Results Component -->
+    {% include "components/results_container.html" with results_title="Agent Results" %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/workflows-core.js' %}?v={{ timestamp }}"></script>
+<script src="{% static 'js/agents-core.js' %}?v={{ timestamp }}"></script>
+<script>
+// File upload handling
+function setupFileUpload() {
+    document.querySelectorAll('.file-upload-label').forEach(label => {
+        const input = document.getElementById(label.getAttribute('for'));
+        const container = label.closest('.file-upload-container');
+        const selectedDiv = container.querySelector('.file-selected');
+        const fileName = container.querySelector('.file-name');
+        
+        // Handle file selection
+        input.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                fileName.textContent = file.name + ' (' + formatFileSize(file.size) + ')';
+                label.style.display = 'none';
+                selectedDiv.style.display = 'flex';
+            }
+        });
+        
+        // Handle drag and drop
+        label.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            label.classList.add('dragover');
+        });
+        
+        label.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            label.classList.remove('dragover');
+        });
+        
+        label.addEventListener('drop', function(e) {
+            e.preventDefault();
+            label.classList.remove('dragover');
+            
+            if (e.dataTransfer.files.length > 0) {
+                const file = e.dataTransfer.files[0];
+                
+                // Check file type if accept attribute is present
+                const accept = input.getAttribute('accept');
+                if (accept && !accept.split(',').some(type => file.name.toLowerCase().endsWith(type.trim()))) {
+                    alert('Please select a valid file type: ' + accept);
+                    return;
+                }
+                
+                input.files = e.dataTransfer.files;
+                fileName.textContent = file.name + ' (' + formatFileSize(file.size) + ')';
+                label.style.display = 'none';
+                selectedDiv.style.display = 'flex';
+            }
+        });
+    });
+}
+
+function removeFile(fieldName) {
+    const input = document.getElementById(fieldName);
+    const container = input.closest('.file-upload-container');
+    const label = container.querySelector('.file-upload-label');
+    const selectedDiv = container.querySelector('.file-selected');
+    
+    input.value = '';
+    label.style.display = 'block';
+    selectedDiv.style.display = 'none';
+}
+
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+// Initialize file upload when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    setupFileUpload();
+});
+</script>
+{% endblock %}

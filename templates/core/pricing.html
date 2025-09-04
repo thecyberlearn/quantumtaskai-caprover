@@ -1,0 +1,489 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Pricing - Quantum Tasks AI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/agent-base.css' %}">
+<link rel="stylesheet" href="{% static 'css/pricing.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="pricing-page theme-professional">
+    <div class="pricing-container">
+        <!-- Hero Section -->
+        <section class="pricing-hero" aria-labelledby="pricing-heading">
+            <h1 id="pricing-heading">💳 Transparent Pricing</h1>
+            <p>Add funds to your wallet and use AI agents with clear, upfront pricing</p>
+        </section>
+        
+        <!-- Pricing Section -->
+        <section class="pricing-section" aria-labelledby="plans-heading">
+            <h2 id="plans-heading" class="section-title">Choose Your Plan</h2>
+            <p class="section-subtitle">Start with any amount and top up as needed</p>
+            
+            <div class="pricing-grid" role="group" aria-label="Pricing plans">
+                <div class="pricing-card" role="article" aria-label="Basic plan - 10 AED">
+                    <div class="card-price">
+                        <span>10</span>
+                        <span class="currency">AED</span>
+                    </div>
+                    <div class="card-description">Perfect for trying out agents</div>
+                    <ul class="card-features">
+                        <li><span class="feature-icon">✓</span> Try multiple AI agents</li>
+                        <li><span class="feature-icon">✓</span> Basic task processing</li>
+                        <li><span class="feature-icon">✓</span> Instant wallet credit</li>
+                        <li><span class="feature-icon">✓</span> Pay only for results</li>
+                    </ul>
+                    <a href="{% url 'authentication:register' %}" 
+                       class="card-button"
+                       aria-label="Get started with basic plan">
+                        Get Started
+                    </a>
+                </div>
+                
+                <div class="pricing-card popular" role="article" aria-label="Popular plan - 50 AED">
+                    <div class="popular-badge">Most Popular</div>
+                    <div class="card-price">
+                        <span>50</span>
+                        <span class="currency">AED</span>
+                    </div>
+                    <div class="card-description">Great for regular usage</div>
+                    <ul class="card-features">
+                        <li><span class="feature-icon">✓</span> All AI agents available</li>
+                        <li><span class="feature-icon">✓</span> Priority processing</li>
+                        <li><span class="feature-icon">✓</span> Extended usage time</li>
+                        <li><span class="feature-icon">✓</span> Best value option</li>
+                    </ul>
+                    <a href="{% url 'authentication:register' %}" 
+                       class="card-button"
+                       aria-label="Get started with popular plan">
+                        Get Started
+                    </a>
+                </div>
+                
+                <div class="pricing-card" role="article" aria-label="Professional plan - 100 AED">
+                    <div class="card-price">
+                        <span>100</span>
+                        <span class="currency">AED</span>
+                    </div>
+                    <div class="card-description">Ideal for power users</div>
+                    <ul class="card-features">
+                        <li><span class="feature-icon">✓</span> Unlimited agent access</li>
+                        <li><span class="feature-icon">✓</span> Fastest processing</li>
+                        <li><span class="feature-icon">✓</span> Bulk operations</li>
+                        <li><span class="feature-icon">✓</span> Maximum efficiency</li>
+                    </ul>
+                    <a href="{% url 'authentication:register' %}" 
+                       class="card-button"
+                       aria-label="Get started with professional plan">
+                        Get Started
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- CTA Section -->
+        <section class="cta-section" aria-labelledby="cta-heading">
+            <h3 id="cta-heading">Ready to get started?</h3>
+            <p>Create your account and start using AI agents today with transparent, pay-as-you-go pricing.</p>
+            <div class="cta-buttons">
+                <a href="{% url 'authentication:register' %}" 
+                   class="cta-btn"
+                   aria-label="Create account to get started">
+                    🚀 Create Account
+                </a>
+                <a href="{% url 'agents:marketplace' %}" 
+                   class="cta-btn secondary"
+                   aria-label="Browse available AI agents">
+                    🤖 View Marketplace
+                </a>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Enhanced Pricing Page Manager with Accessibility
+class PricingManager {
+    constructor() {
+        try {
+            this.pricingCards = document.querySelectorAll('.pricing-card');
+            this.ctaButtons = document.querySelectorAll('.cta-btn');
+            this.cardButtons = document.querySelectorAll('.card-button');
+            
+            this.init();
+        } catch (error) {
+            console.error('Failed to initialize PricingManager:', error);
+        }
+    }
+    
+    init() {
+        this.setupCardInteractions();
+        this.setupButtonHovers();
+        this.addKeyboardNavigation();
+        this.addScrollAnimations();
+    }
+    
+    setupCardInteractions() {
+        this.pricingCards.forEach((card, index) => {
+            // Add hover effects
+            card.addEventListener('mouseenter', () => {
+                this.highlightCard(card);
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                this.removeHighlight(card);
+            });
+            
+            // Add click to select functionality
+            card.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('card-button')) {
+                    this.selectCard(card);
+                }
+            });
+            
+            // Keyboard support
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.selectCard(card);
+                }
+            });
+        });
+    }
+    
+    highlightCard(card) {
+        card.style.transform = 'translateY(-4px)';
+        card.style.boxShadow = 'var(--shadow-lg)';
+    }
+    
+    removeHighlight(card) {
+        if (!card.classList.contains('selected')) {
+            card.style.transform = 'translateY(-2px)';
+            card.style.boxShadow = '';
+        }
+    }
+    
+    selectCard(card) {
+        // Remove selection from other cards
+        this.pricingCards.forEach(c => {
+            c.classList.remove('selected');
+            c.setAttribute('aria-selected', 'false');
+        });
+        
+        // Select current card
+        card.classList.add('selected');
+        card.setAttribute('aria-selected', 'true');
+        
+        // Get price for announcement
+        const price = card.querySelector('.card-price span:first-child')?.textContent;
+        if (price) {
+            this.announceSelection(`${price} AED plan selected`);
+        }
+        
+        // Highlight the card button
+        const button = card.querySelector('.card-button');
+        if (button) {
+            button.focus();
+        }
+    }
+    
+    setupButtonHovers() {
+        // Enhanced button interactions
+        [...this.cardButtons, ...this.ctaButtons].forEach(button => {
+            button.addEventListener('mouseenter', () => {
+                button.style.transform = 'translateY(-2px)';
+            });
+            
+            button.addEventListener('mouseleave', () => {
+                button.style.transform = '';
+            });
+            
+            button.addEventListener('focus', () => {
+                button.style.outline = '2px solid var(--primary)';
+                button.style.outlineOffset = '2px';
+            });
+            
+            button.addEventListener('blur', () => {
+                button.style.outline = '';
+                button.style.outlineOffset = '';
+            });
+        });
+    }
+    
+    addKeyboardNavigation() {
+        // Arrow key navigation between pricing cards
+        this.pricingCards.forEach((card, index) => {
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('role', 'button');
+            card.setAttribute('aria-selected', 'false');
+            
+            card.addEventListener('keydown', (e) => {
+                let targetIndex = index;
+                
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        targetIndex = index > 0 ? index - 1 : this.pricingCards.length - 1;
+                        break;
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        targetIndex = index < this.pricingCards.length - 1 ? index + 1 : 0;
+                        break;
+                    case 'Home':
+                        e.preventDefault();
+                        targetIndex = 0;
+                        break;
+                    case 'End':
+                        e.preventDefault();
+                        targetIndex = this.pricingCards.length - 1;
+                        break;
+                    default:
+                        return;
+                }
+                
+                this.pricingCards[targetIndex].focus();
+            });
+        });
+    }
+    
+    addScrollAnimations() {
+        // Intersection Observer for scroll animations
+        if ('IntersectionObserver' in window) {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe pricing cards and sections
+            this.pricingCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+                observer.observe(card);
+            });
+            
+            // Observe other sections
+            document.querySelectorAll('.pricing-hero, .cta-section').forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(section);
+            });
+        }
+    }
+    
+    announceSelection(message) {
+        // Create or update live region for screen reader announcements
+        let liveRegion = document.getElementById('pricing-announcement');
+        if (!liveRegion) {
+            liveRegion = document.createElement('div');
+            liveRegion.id = 'pricing-announcement';
+            liveRegion.setAttribute('aria-live', 'polite');
+            liveRegion.setAttribute('aria-atomic', 'true');
+            liveRegion.style.position = 'absolute';
+            liveRegion.style.left = '-9999px';
+            document.body.appendChild(liveRegion);
+        }
+        
+        liveRegion.textContent = message;
+    }
+}
+
+// Plan Comparison Function
+function showPlanComparison() {
+    const features = {
+        basic: ['Try multiple AI agents', 'Basic task processing', 'Instant wallet credit'],
+        popular: ['All AI agents available', 'Priority processing', 'Extended usage time', 'Best value option'],
+        professional: ['Unlimited agent access', 'Fastest processing', 'Bulk operations', 'Maximum efficiency']
+    };
+    
+    let comparisonHtml = '<div class="plan-comparison"><h3>Plan Comparison</h3>';
+    
+    Object.entries(features).forEach(([plan, featureList]) => {
+        comparisonHtml += `<div class="plan-features"><h4>${plan.charAt(0).toUpperCase() + plan.slice(1)}</h4><ul>`;
+        featureList.forEach(feature => {
+            comparisonHtml += `<li>✓ ${feature}</li>`;
+        });
+        comparisonHtml += '</ul></div>';
+    });
+    
+    comparisonHtml += '</div>';
+    
+    showModal('Plan Comparison', comparisonHtml);
+}
+
+// Enhanced Modal System
+function showModal(title, content) {
+    // Remove existing modal
+    const existingModal = document.querySelector('.pricing-modal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+    
+    // Create modal
+    const modal = document.createElement('div');
+    modal.className = 'pricing-modal';
+    modal.innerHTML = `
+        <div class="modal-backdrop" onclick="closeModal()"></div>
+        <div class="modal-content" role="dialog" aria-labelledby="modal-title" aria-modal="true">
+            <div class="modal-header">
+                <h3 id="modal-title">${title}</h3>
+                <button class="modal-close" onclick="closeModal()" aria-label="Close modal">×</button>
+            </div>
+            <div class="modal-body">${content}</div>
+        </div>
+    `;
+    
+    // Modal styles
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    `;
+    
+    // Add modal styles if not exists
+    if (!document.querySelector('#modal-styles')) {
+        const style = document.createElement('style');
+        style.id = 'modal-styles';
+        style.textContent = `
+            .modal-backdrop {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                backdrop-filter: blur(4px);
+            }
+            .modal-content {
+                background: var(--surface);
+                border-radius: var(--radius-lg);
+                max-width: 600px;
+                width: 90%;
+                max-height: 80vh;
+                overflow-y: auto;
+                box-shadow: var(--shadow-lg);
+                position: relative;
+                z-index: 1001;
+            }
+            .modal-header {
+                padding: var(--spacing-lg);
+                border-bottom: 1px solid var(--outline);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .modal-body {
+                padding: var(--spacing-lg);
+            }
+            .modal-close {
+                background: none;
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+                color: var(--on-surface-variant);
+            }
+            .plan-comparison {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: var(--spacing-md);
+            }
+            .plan-features h4 {
+                margin-bottom: var(--spacing-sm);
+                color: var(--primary);
+            }
+            .plan-features ul {
+                list-style: none;
+                padding: 0;
+            }
+            .plan-features li {
+                padding: var(--spacing-xs) 0;
+                font-size: 14px;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    document.body.appendChild(modal);
+    
+    // Focus management
+    const closeButton = modal.querySelector('.modal-close');
+    if (closeButton) {
+        closeButton.focus();
+    }
+    
+    // Escape key to close
+    const handleEscape = (e) => {
+        if (e.key === 'Escape') {
+            closeModal();
+            document.removeEventListener('keydown', handleEscape);
+        }
+    };
+    document.addEventListener('keydown', handleEscape);
+}
+
+function closeModal() {
+    const modal = document.querySelector('.pricing-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    new PricingManager();
+    
+    // Add smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+});
+
+// Add loading states for buttons
+document.querySelectorAll('.card-button, .cta-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        if (!this.classList.contains('loading')) {
+            this.classList.add('loading');
+            const originalText = this.textContent;
+            this.textContent = '⏳ Loading...';
+            
+            // Reset after navigation (this is just for UX, actual navigation will occur)
+            setTimeout(() => {
+                if (this.classList.contains('loading')) {
+                    this.classList.remove('loading');
+                    this.textContent = originalText;
+                }
+            }, 2000);
+        }
+    });
+});
+</script>
+{% endblock %}

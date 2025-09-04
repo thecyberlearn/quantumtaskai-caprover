@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <a href="{% url 'core:homepage' %}" class="back-link">← Back to Homepage</a>
+    <div class="profile-header">
+        <h1>Profile - {{ user.username }}</h1>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Balance:</strong> {{ user.wallet_balance }} AED</p>
+        <div class="wallet-status {{ wallet_status.status }}">
+            <strong>{{ wallet_status.message }}</strong>
+        </div>
+        <a href="{% url 'wallet:wallet' %}" class="btn">Manage Wallet</a>
+        <a href="{% url 'wallet:wallet_topup' %}" class="btn">Top Up</a>
+    </div>
+    <div class="stats">
+        <div class="stat-card">
+            <div class="stat-value">{{ total_spent }} AED</div>
+            <div>Total Spent</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ total_topped_up }} AED</div>
+            <div>Total Topped Up</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ total_agents_used }}</div>
+            <div>Agents Used</div>
+        </div>
+    </div>
+    {% if popular_agents %}
+        <div class="popular-agents">
+            <h2>Your Most Used Agents</h2>
+            {% for agent in popular_agents %}
+                <div class="agent-item">
+                    <span>{{ agent.agent_slug }}</span>
+                    <span><strong>{{ agent.count }}</strong> times</span>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div class="transactions">
+        <h2>Recent Transactions</h2>
+        {% if transactions %}
+            {% for transaction in transactions %}
+                <div class="transaction-item">
+                    <div>
+                        <strong>{{ transaction.description }}</strong>
+                        <small>{{ transaction.created_at|date:"M d, Y H:i" }}</small>
+                    </div>
+                    <div class="transaction-amount {% if transaction.type == 'top_up' %}positive{% else %}negative{% endif %}">
+                        {% if transaction.type == 'top_up' %}+{% else %}-{% endif %}{{ transaction.amount }} AED
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No transactions yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

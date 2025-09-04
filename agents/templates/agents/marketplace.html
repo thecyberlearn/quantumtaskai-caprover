@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}AI Agent Marketplace - Quantum Tasks AI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/agent-base.css' %}">
+<link rel="stylesheet" href="{% static 'css/marketplace.css' %}">
+<style>
+/* All Try Now buttons now use consistent styling from marketplace.css */
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="agent-container">
+    <!-- Marketplace Header -->
+    <div class="marketplace-header">
+        <h1 class="marketplace-title">🤖 AI Agent Marketplace</h1>
+        <p class="marketplace-subtitle">
+            Discover powerful AI agents to automate your tasks, boost productivity, and streamline your workflow
+        </p>
+    </div>
+
+    <!-- Search Box -->
+    <div class="search-box" style="margin-bottom: var(--spacing-lg); max-width: 500px; margin-left: auto; margin-right: auto;">
+        <form method="GET" style="position: relative;">
+            <span class="search-icon">🔍</span>
+            <input type="text" name="search" class="search-input" 
+                   placeholder="Search agents..." 
+                   value="{{ search_query }}"
+                   onchange="this.form.submit()">
+            {% if selected_category %}
+                <input type="hidden" name="category" value="{{ selected_category }}">
+            {% endif %}
+        </form>
+    </div>
+    
+    <!-- Category Filter Buttons -->
+    <div class="category-filter" style="display: flex; gap: var(--spacing-sm); flex-wrap: wrap; justify-content: center; margin-bottom: var(--spacing-xl);">
+        <a href="{% url 'agents:marketplace' %}" 
+           class="category-btn {% if not selected_category %}active{% endif %}">
+            All
+        </a>
+        {% for category in categories %}
+            <a href="?category={{ category.slug }}{% if search_query %}&search={{ search_query }}{% endif %}" 
+               class="category-btn {% if selected_category == category.slug %}active{% endif %}">
+                {{ category.icon }} {{ category.name }}
+            </a>
+        {% endfor %}
+    </div>
+
+    <!-- Stats -->
+    <div class="marketplace-stats">
+        {% if search_query %}
+            Search results for "{{ search_query }}"
+            {% if selected_category %} • {{ selected_category|capfirst }} category{% endif %}
+        {% elif selected_category %}
+            {{ selected_category|capfirst }} category
+        {% endif %}
+    </div>
+
+    <!-- Agents Grid -->
+    {% if agents %}
+        <div class="agents-grid">
+            {% for agent in agents %}
+                <div class="agent-card">
+                    <div class="agent-header">
+                        <div class="agent-icon">{{ agent.category.icon }}</div>
+                        <div class="agent-info">
+                            <h3>{{ agent.name }}</h3>
+                            <p class="agent-price">{{ agent.price }} AED</p>
+                        </div>
+                    </div>
+                    <p class="agent-description">{{ agent.short_description }}</p>
+                    <div class="agent-footer">
+                        {% if user.is_authenticated %}
+                            {% if agent.access_url_name and agent.display_url_name %}
+                                <!-- Direct Access Agent -->
+                                <a href="{% url 'agents:direct_access_handler' agent.slug %}" class="try-btn">
+                                    Try Now →
+                                </a>
+                            {% else %}
+                                <!-- Webhook Agent -->
+                                <a href="{% url 'agents:detail' agent.slug %}" class="try-btn">Try Now →</a>
+                            {% endif %}
+                        {% else %}
+                            {% if agent.access_url_name and agent.display_url_name %}
+                                <!-- Direct Access Agent -->
+                                <a href="{% url 'authentication:login' %}?next={% url 'agents:direct_access_handler' agent.slug %}" class="try-btn login-required" style="width: 100%;">
+                                    🔐 Login to Try
+                                </a>
+                            {% else %}
+                                <!-- Webhook Agent -->
+                                <a href="{% url 'authentication:login' %}?next={% url 'agents:detail' agent.slug %}" class="try-btn login-required" style="width: 100%;">
+                                    🔐 Login to Try
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-results">
+            <div class="no-results-icon">🔍</div>
+            <h3>No agents found</h3>
+            <p>Try adjusting your search or browse all categories</p>
+            <a href="{% url 'agents:marketplace' %}" class="btn btn-primary">Browse All Agents</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

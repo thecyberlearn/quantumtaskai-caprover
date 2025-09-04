@@ -1,0 +1,109 @@
+{
+  "slug": "brand-digital-presence-finder-pro",
+  "name": "Brand Digital Presence Finder Pro",
+  "short_description": "Real-time brand presence discovery across 14 platforms with live verification and competitor insights",
+  "description": "Advanced AI-powered brand presence analysis with real-time search capabilities across major digital platforms including Google Business, LinkedIn, YouTube, TikTok, Instagram, Pinterest, X (Twitter), Facebook, Medium, Tumblr, Threads, Quora, Reddit, and Blue Sky. Features live verification, actual profile URLs, search rankings, competitor analysis, and actionable recommendations powered by SERP API and GPT-4.",
+  "category": "marketing",
+  "price": 0.0,
+  "agent_type": "form",
+  "system_type": "webhook",
+  "form_schema": {
+    "fields": [
+      {
+        "name": "brand_name",
+        "type": "text",
+        "label": "Brand Name",
+        "placeholder": "Enter your brand name (e.g., Tesla, Nike)",
+        "required": true,
+        "maxlength": 100,
+        "validation": {
+          "minLength": 2,
+          "pattern": "^[a-zA-Z0-9\\s\\-\\.&']+$",
+          "message": "Brand name should contain only letters, numbers, spaces, hyphens, dots, and apostrophes"
+        }
+      },
+      {
+        "name": "website_url",
+        "type": "url",
+        "label": "Website URL",
+        "placeholder": "https://www.example.com",
+        "required": true,
+        "validation": {
+          "pattern": "^https?:\\/\\/(www\\.)?[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\\.[a-zA-Z]{2,}$",
+          "message": "Please enter a valid website URL (e.g., https://www.example.com)"
+        }
+      },
+      {
+        "name": "include_competitor_analysis",
+        "type": "checkbox",
+        "label": "Include Competitor Analysis",
+        "placeholder": "Analyze top 3 competitors in search results",
+        "required": false,
+        "default": false
+      }
+    ]
+  },
+  "webhook_url": "internal://brand-presence-analysis-pro",
+  "access_url_name": "",
+  "display_url_name": "",
+  "expected_response_format": {
+    "platforms": [
+      {
+        "name": "Google Business",
+        "found": true,
+        "verified": true,
+        "profile_url": "https://business.google.com/example",
+        "confidence": "high",
+        "search_ranking": 1,
+        "notes": "Verified business listing with 4.8/5 rating, 1,234 reviews",
+        "last_updated": "2025-08-28",
+        "activity_level": "high"
+      },
+      {
+        "name": "LinkedIn",
+        "found": false,
+        "verified": null,
+        "profile_url": null,
+        "confidence": null,
+        "search_ranking": null,
+        "notes": "No official company page found in top 10 search results",
+        "recommendation": "Create LinkedIn Company Page - essential for B2B credibility"
+      }
+    ],
+    "summary": {
+      "total_platforms_checked": 14,
+      "platforms_found": 9,
+      "platforms_missing": 5,
+      "completion_percentage": 64,
+      "verification_rate": 78,
+      "average_search_ranking": 2.3,
+      "digital_presence_score": "B+"
+    },
+    "competitor_analysis": {
+      "enabled": true,
+      "competitors_found": [
+        {
+          "name": "Competitor A",
+          "platforms_present": 12,
+          "verification_rate": 92,
+          "digital_presence_score": "A"
+        }
+      ]
+    },
+    "recommendations": [
+      {
+        "platform": "TikTok",
+        "priority": "high",
+        "reason": "Missing from fastest-growing platform. 67% of competitors active here.",
+        "estimated_setup_time": "2-3 hours",
+        "potential_reach": "500K+ monthly views"
+      }
+    ],
+    "insights": {
+      "strongest_presence": "Instagram",
+      "biggest_opportunity": "TikTok",
+      "verification_gaps": 3,
+      "industry_benchmark": "Above average (64% vs 52% industry average)"
+    }
+  }
+}

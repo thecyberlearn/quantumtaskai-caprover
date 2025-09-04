@@ -1,0 +1,529 @@
+/* ================================================================
+   Header Component CSS - Single Source of Truth
+   ================================================================
+   
+   This file contains ALL header-related styling to ensure
+   consistent behavior across all pages and prevent CSS conflicts.
+   
+   Architecture:
+   - Component-based isolation
+   - CSS custom properties for theming
+   - No external dependencies
+   - Mobile-first responsive design
+   ================================================================ */
+
+/* ================================================================
+   Clean Browser Reset - No Active States
+   ================================================================ */
+
+.header-component * {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    box-sizing: border-box;
+}
+
+.header-component a,
+.header-component button {
+    outline: none;
+    text-decoration: none;
+}
+
+/* CSS Custom Properties for Theming */
+:root {
+    /* Header-specific variables */
+    --header-height: 84px;
+    --header-bg: #ffffff;
+    --header-border: #e5e7eb;
+    --header-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    
+    /* Logo variables */
+    --logo-height: 60px;
+    --logo-height-mobile: 40px;
+    
+    /* Navigation variables */
+    --nav-text: #6b7280;
+    --nav-text-hover: #3b82f6;
+    --nav-text-active: #1d4ed8;
+    
+    /* Auth button variables */
+    --auth-gap: 12px;
+    --auth-padding: 8px 16px;
+    --auth-radius: 6px;
+    --auth-transition: all 0.2s ease;
+    
+    /* Register button (Primary CTA) */
+    --register-bg: #000000;
+    --register-bg-hover: #1f2937;
+    --register-text: #ffffff;
+    --register-border: #000000;
+    --register-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.15);
+    
+    /* Login button (Secondary) */
+    --login-bg: transparent;
+    --login-bg-hover: #f9fafb;
+    --login-text: #374151;
+    --login-text-hover: #1f2937;
+    --login-border: #d1d5db;
+    --login-border-hover: #9ca3af;
+    
+    /* Wallet button */
+    --wallet-bg: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    --wallet-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    --wallet-shadow-hover: 0 4px 12px rgba(16, 185, 129, 0.4);
+    
+    /* Focus states */
+    --focus-outline: 2px solid #3b82f6;
+    --focus-offset: 2px;
+    
+    /* Mobile breakpoints */
+    --mobile-sm: 480px;
+    --mobile-md: 640px;
+    --tablet: 768px;
+}
+
+/* ================================================================
+   Header Container
+   ================================================================ */
+
+.header-component {
+    background: var(--header-bg);
+    padding: 12px 0;
+    border-bottom: 1px solid var(--header-border);
+    box-shadow: var(--header-shadow);
+    position: relative;
+    z-index: 100;
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    min-height: var(--header-height);
+}
+
+/* ================================================================
+   Logo Section
+   ================================================================ */
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex: 1;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+    flex-shrink: 0;
+}
+
+.logo-img {
+    width: auto;
+    height: var(--logo-height);
+    object-fit: contain;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.logo-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e3a8a;
+    margin: 0;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+}
+
+.logo-subtitle {
+    font-size: 10px;
+    color: var(--nav-text);
+    margin: 0;
+    line-height: 1.2;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+}
+
+/* ================================================================
+   Navigation
+   ================================================================ */
+
+.header-nav {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+}
+
+.header-component .nav-link {
+    color: var(--nav-text) !important;
+    font-weight: 400 !important;
+    font-size: 16px !important;
+    padding: 8px 0;
+    background: transparent !important;
+    border: none !important;
+    font-family: 'Inter', Arial, sans-serif !important;
+    position: relative;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    text-rendering: optimizeLegibility !important;
+}
+
+/* Extra specificity to override any conflicting CSS */
+.header-component.theme-professional .nav-link,
+.pricing-page .header-component .nav-link,
+.agent-page .header-component .nav-link {
+    font-family: 'Inter', Arial, sans-serif !important;
+    font-weight: 400 !important;
+}
+
+/* Active page indicator - thin line under nav text */
+.header-component .nav-link.active {
+    position: relative;
+}
+
+.header-component .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--nav-text-hover);
+    border-radius: 1px;
+}
+
+.header-component .nav-link:hover,
+.header-component .nav-link:active,
+.header-component .nav-link:focus,
+.header-component .nav-link:visited {
+    color: var(--nav-text) !important;
+    background: transparent !important;
+    font-weight: 400 !important;
+    border: none !important;
+    box-shadow: none !important;
+    font-family: 'Inter', Arial, sans-serif !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* ================================================================
+   User Info Section
+   ================================================================ */
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+}
+
+.user-welcome {
+    color: #374151;
+    font-weight: 500;
+    margin: 0;
+    white-space: nowrap;
+}
+
+/* ================================================================
+   Wallet Balance Button
+   ================================================================ */
+
+.balance {
+    background: var(--wallet-bg);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: var(--wallet-shadow);
+    text-decoration: none;
+    display: inline-block;
+    transition: var(--auth-transition);
+    white-space: nowrap;
+}
+
+.balance:hover {
+    box-shadow: var(--wallet-shadow-hover);
+    color: white;
+}
+
+/* ================================================================
+   Authentication Links (Login/Register)
+   ================================================================ */
+
+.auth-links {
+    display: flex;
+    gap: var(--auth-gap);
+    align-items: center;
+}
+
+/* Base auth button styles */
+.header-component .auth-links a {
+    text-decoration: none;
+    font-weight: 500;
+    padding: var(--auth-padding);
+    border-radius: var(--auth-radius);
+    transition: var(--auth-transition);
+    border: 1px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    box-sizing: border-box;
+    background-clip: padding-box;
+}
+
+/* Register Button - Primary CTA */
+.header-component .auth-links a[href*="register"] {
+    background: var(--register-bg);
+    color: var(--register-text);
+    font-weight: 600;
+    border: 1px solid var(--register-border);
+}
+
+.header-component .auth-links a[href*="register"]:hover {
+    background: var(--register-bg-hover);
+    color: var(--register-text);
+    border-color: var(--register-bg-hover);
+    box-shadow: var(--register-shadow-hover);
+}
+
+/* Login Button - Secondary Action */
+.header-component .auth-links a[href*="login"] {
+    background: var(--login-bg);
+    color: var(--login-text);
+    border: 1px solid var(--login-border);
+}
+
+.header-component .auth-links a[href*="login"]:hover {
+    background: var(--login-bg-hover);
+    color: var(--login-text-hover);
+    border-color: var(--login-border-hover);
+}
+
+/* Focus states for accessibility */
+.header-component .auth-links a:focus {
+    outline: var(--focus-outline);
+    outline-offset: var(--focus-offset);
+}
+
+/* No active state styling - user requested complete removal */
+
+/* Logout button styling */
+.header-component .auth-links a[href*="logout"] {
+    color: #ef4444;
+    background: transparent;
+    border: 1px solid transparent;
+}
+
+.header-component .auth-links a[href*="logout"]:hover {
+    color: #dc2626;
+    background: rgba(239, 68, 68, 0.05);
+    border-color: transparent;
+}
+
+/* ================================================================
+   Mobile Navigation Toggle
+   ================================================================ */
+
+.mobile-nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--nav-text);
+    cursor: pointer;
+    padding: 8px;
+    margin-left: auto;
+    transition: var(--auth-transition);
+}
+
+.mobile-nav-toggle:hover {
+    color: var(--nav-text-hover);
+}
+
+/* ================================================================
+   Responsive Design
+   ================================================================ */
+
+/* Tablet */
+@media (max-width: 768px) {
+    .header-container {
+        padding: 0 16px;
+    }
+    
+    .header-left {
+        justify-content: space-between;
+        gap: 16px;
+    }
+    
+    .logo-section {
+        flex-shrink: 0;
+    }
+    
+    .mobile-nav-toggle {
+        display: block;
+    }
+    
+    .header-nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--header-bg);
+        flex-direction: column;
+        gap: 8px;
+        padding: 16px 24px;
+        border-top: 1px solid var(--header-border);
+        box-shadow: var(--header-shadow);
+        z-index: 1000;
+    }
+    
+    .header-nav.mobile-open {
+        display: flex;
+    }
+    
+    .nav-link {
+        padding: 12px 16px;
+        text-align: center;
+        border-radius: var(--auth-radius);
+        background: rgba(59, 130, 246, 0.05);
+        margin: 2px 0;
+    }
+    
+    .user-info {
+        justify-content: center;
+        gap: 12px;
+        width: 100%;
+    }
+    
+    .user-welcome {
+        font-size: 14px;
+    }
+    
+    .balance {
+        font-size: 13px;
+        padding: 6px 12px;
+    }
+    
+    .auth-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+    
+    .auth-links a {
+        padding: 8px 14px;
+        font-size: 14px;
+    }
+}
+
+/* Mobile Small */
+@media (max-width: 480px) {
+    .header-container {
+        padding: 0 12px;
+        gap: 12px;
+    }
+    
+    .header-left {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .logo-img {
+        height: var(--logo-height-mobile);
+    }
+    
+    .logo-title {
+        font-size: 16px;
+    }
+    
+    .user-info {
+        flex-direction: column;
+        gap: 8px;
+        align-items: center;
+    }
+    
+    .user-welcome {
+        font-size: 13px;
+        text-align: center;
+    }
+    
+    .balance {
+        font-size: 12px;
+        padding: 5px 10px;
+        border-radius: 16px;
+    }
+    
+    .auth-links {
+        gap: 6px;
+        flex-direction: row;
+    }
+    
+    .auth-links a {
+        padding: 6px 12px;
+        font-size: 13px;
+        min-width: 70px;
+        text-align: center;
+    }
+}
+
+/* ================================================================
+   Theme Variants
+   ================================================================ */
+
+/* Professional Theme (Default) */
+.header-component.theme-professional {
+    /* Uses default CSS custom properties */
+}
+
+/* Dark Theme */
+.header-component.theme-dark {
+    --header-bg: #1f2937;
+    --header-border: #374151;
+    --nav-text: #d1d5db;
+    --nav-text-hover: #60a5fa;
+    --nav-text-active: #3b82f6;
+    --register-bg: #ffffff;
+    --register-bg-hover: #f3f4f6;
+    --register-text: #000000;
+    --register-border: #ffffff;
+    --login-bg: transparent;
+    --login-bg-hover: #374151;
+    --login-text: #d1d5db;
+    --login-text-hover: #ffffff;
+    --login-border: #4b5563;
+    --login-border-hover: #6b7280;
+}
+
+/* ================================================================
+   Clean Component Architecture
+   ================================================================ */
+
+/* Clean component isolation without hacks */
+.header-component * {
+    box-sizing: border-box;
+}
+
+.header-component .auth-links a {
+    font-family: inherit;
+    line-height: 1.5;
+    text-transform: none;
+    letter-spacing: normal;
+    text-shadow: none;
+    vertical-align: baseline;
+}

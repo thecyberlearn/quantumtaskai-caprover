@@ -1,0 +1,248 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Quantum Tasks AI - AI Platform{% endblock %}</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{% block meta_description %}Quantum Tasks AI - Advanced AI platform for automation and intelligent task management. Access powerful AI agents for your business needs.{% endblock %}">
+    <meta name="keywords" content="AI, artificial intelligence, automation, task management, AI agents, quantum computing">
+    <meta name="author" content="Quantum Tasks AI">
+    
+    <!-- Open Graph Meta Tags for Rich Link Previews -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Quantum Tasks AI">
+    <meta property="og:title" content="{% block og_title %}Quantum Tasks AI - AI Platform{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Advanced AI agent marketplace for automation, analysis, and productivity. Access powerful AI tools for business and personal use.{% endblock %}">
+    <meta property="og:url" content="{% block og_url %}https://quantumtaskai.com{{ request.get_full_path }}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}https://quantumtaskai.com{% static 'img/og-image.png' %}{% endblock %}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Quantum Tasks AI - AI Agent Marketplace">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@quantumtaskai">
+    <meta name="twitter:title" content="{% block twitter_title %}Quantum Tasks AI - AI Platform{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Advanced AI agent marketplace for automation, analysis, and productivity. Access powerful AI tools for business and personal use.{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}https://quantumtaskai.com{% static 'img/og-image.png' %}{% endblock %}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}">
+    
+    <!-- Unified Font Loading - Single Source of Truth -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"></noscript>
+    
+    <!-- Base Styles -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}?v=3">
+    
+    {% block extra_css %}{% endblock %}
+    
+    <!-- Header Component - ALWAYS loads last for consistency -->
+    <link rel="stylesheet" href="{% static 'css/header-component.css' %}?v=3">
+</head>
+<body>
+    <!-- Header -->
+    <div class="header-component theme-professional">
+        <div class="header-container">
+            <div class="header-left">
+                <a href="{% url 'core:homepage' %}" class="logo-section">
+                    <img src="{% static 'img/logo.png' %}" alt="Quantum Tasks AI" class="logo-img">
+                </a>
+                <nav class="header-nav" id="header-nav">
+                    <a href="{% url 'core:homepage' %}" class="nav-link {% if request.resolver_match.url_name == 'homepage' %}active{% endif %}">Home</a>
+                    <a href="{% url 'core:digital_branding' %}" class="nav-link {% if request.resolver_match.url_name == 'digital_branding' %}active{% endif %}">AI Digital Branding</a>
+                    <a href="{% url 'agents:marketplace' %}" class="nav-link {% if request.resolver_match.url_name == 'marketplace' %}active{% endif %}">AI Marketplace</a>
+                </nav>
+                <button class="mobile-nav-toggle" onclick="toggleMobileNav()" aria-label="Toggle navigation">
+                    ☰
+                </button>
+            </div>
+            <div class="user-info">
+                {% if user.is_authenticated %}
+                    <p class="user-welcome">Welcome, {{ user.username }}!</p>
+                    <a href="{% url 'wallet:wallet' %}" class="balance" data-wallet-balance>💰 {{ user.wallet_balance|floatformat:2 }} AED</a>
+                    <div class="auth-links">
+                        <a href="{% url 'wallet:wallet' %}">Wallet</a>
+                        <a href="{% url 'authentication:logout' %}">Logout</a>
+                    </div>
+                {% else %}
+                    <div class="auth-links">
+                        <a href="{% url 'authentication:login' %}">Login</a>
+                        <a href="{% url 'authentication:register' %}">Register</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-container">
+        {% block content %}{% endblock %}
+    </div>
+    
+    <!-- Footer (hidden on agent pages) -->
+    {% if not request.resolver_match.url_name == 'agent_detail' and '/agents/' not in request.path %}
+    <footer class="footer" id="footer">
+        <div class="footer-container">
+            <!-- Main Footer Content -->
+            <div class="footer-main">
+                <!-- Company Info -->
+                <div class="footer-company">
+                    <div class="footer-logo">
+                        <img src="{% static 'img/logo.png' %}" alt="Quantum Tasks AI" class="footer-logo-img">
+                    </div>
+                    <p class="footer-description">
+                        Leading cybersecurity consultancy providing comprehensive security solutions and AI-powered automation.
+                    </p>
+                    
+                    <div class="footer-contact">
+                        <a href="mailto:contact@quantumtaskai.com" class="footer-contact-item">
+                            📧 contact@quantumtaskai.com
+                        </a>
+                        <span class="footer-contact-item">
+                            📍 Dubai, UAE
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Navigation Sections -->
+                <div class="footer-nav">
+                    <!-- Services -->
+                    <div class="footer-nav-section">
+                        <h4 class="footer-nav-title">Services</h4>
+                        <div class="footer-nav-links">
+                            <a href="#services" class="footer-nav-link">Cybersecurity Consulting</a>
+                            <a href="#services" class="footer-nav-link">Risk Assessment</a>
+                            <a href="#services" class="footer-nav-link">Compliance Audits</a>
+                            <a href="#services" class="footer-nav-link">Security Training</a>
+                        </div>
+                    </div>
+
+                    <!-- Company -->
+                    <div class="footer-nav-section">
+                        <h4 class="footer-nav-title">Company</h4>
+                        <div class="footer-nav-links">
+                            <a href="#company-profile" class="footer-nav-link">About Us</a>
+                            <a href="#founder" class="footer-nav-link">Leadership</a>
+                            <a href="#contact" class="footer-nav-link">Contact Us</a>
+                            <a href="{% url 'agents:marketplace' %}" class="footer-nav-link">AI Marketplace</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Section -->
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    © 2025 Quantum Tasks AI. All rights reserved.
+                </p>
+                <div class="footer-legal">
+                    <button class="footer-legal-link" onclick="showPrivacyModal()">
+                        Privacy Policy
+                    </button>
+                    <a href="#terms" class="footer-legal-link">Terms of Service</a>
+                    <a href="#security" class="footer-legal-link">Security</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    {% endif %}
+
+    <!-- Privacy Policy Modal -->
+    <div class="modal-overlay" id="privacy-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Privacy Policy</h2>
+                <button class="modal-close" onclick="hidePrivacyModal()">&times;</button>
+            </div>
+            <div class="modal-text">
+                <p style="margin-bottom: 16px;">
+                    <strong>Quantum Tasks AI</strong> is committed to protecting your privacy and ensuring the security of your personal information.
+                </p>
+                <p style="margin-bottom: 16px;">
+                    <strong>Information We Collect:</strong><br>
+                    We collect information you provide directly to us, such as when you create an account, use our AI services, or contact us for support.
+                </p>
+                <p style="margin-bottom: 16px;">
+                    <strong>How We Use Your Information:</strong><br>
+                    We use the information we collect to provide, maintain, and improve our services, process transactions, and communicate with you.
+                </p>
+                <p style="margin-bottom: 16px;">
+                    <strong>Data Security:</strong><br>
+                    We implement appropriate technical and organizational security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.
+                </p>
+                <p style="margin-bottom: 16px;">
+                    <strong>Contact Us:</strong><br>
+                    If you have any questions about this Privacy Policy, please contact us at contact@quantumtaskai.com
+                </p>
+                <p style="margin: 0; font-size: 12px; color: #9ca3af;">
+                    Last updated: January 2025
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Mobile navigation toggle
+        function toggleMobileNav() {
+            const nav = document.getElementById('header-nav');
+            nav.classList.toggle('mobile-open');
+        }
+
+        // Close mobile nav when clicking outside or on a link
+        document.addEventListener('click', function(e) {
+            const nav = document.getElementById('header-nav');
+            const toggle = document.querySelector('.mobile-nav-toggle');
+            
+            if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+                nav.classList.remove('mobile-open');
+            }
+        });
+
+        // Close mobile nav when clicking on nav links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                document.getElementById('header-nav').classList.remove('mobile-open');
+            });
+        });
+
+        // Privacy modal functions
+        function showPrivacyModal() {
+            const modal = document.getElementById('privacy-modal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hidePrivacyModal() {
+            const modal = document.getElementById('privacy-modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('privacy-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hidePrivacyModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                hidePrivacyModal();
+            }
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

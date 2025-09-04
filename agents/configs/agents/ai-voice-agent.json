@@ -1,0 +1,16 @@
+{
+  "slug": "ai-voice-agent",
+  "name": "AI Voice Agent",
+  "short_description": "Transform your content with AI-powered voice generation and audio solutions",
+  "description": "Create professional voiceovers, podcasts, and audio content using advanced AI voice technology. Perfect for marketing campaigns, educational content, and multimedia projects.",
+  "category": "marketing",
+  "price": 0.0,
+  "agent_type": "form",
+  "system_type": "direct_access",
+  "form_schema": {
+    "fields": []
+  },
+  "webhook_url": "https://agent.jotform.com/0198a8860b46796895f2a40367a6cea4df0c/voice",
+  "access_url_name": "agents:direct_access_handler",
+  "display_url_name": "agents:direct_access_display"
+}

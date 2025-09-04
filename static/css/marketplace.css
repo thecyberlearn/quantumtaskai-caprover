@@ -1,0 +1,341 @@
+/* Marketplace Page Styles - Extracted from inline CSS */
+
+/* Marketplace Header */
+.marketplace-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+    padding: var(--space-xl) 0;
+}
+
+.marketplace-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--on-surface);
+    margin-bottom: var(--space-md);
+}
+
+.marketplace-subtitle {
+    font-size: 1.1rem;
+    color: var(--on-surface-variant);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Marketplace Filters */
+.marketplace-filters {
+    display: flex;
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-box {
+    flex: 1;
+    max-width: 400px;
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 16px 12px 44px;
+    border: 2px solid var(--outline-variant);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    background: var(--surface);
+    color: var(--on-surface);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--on-surface-variant);
+}
+
+/* Category Filters */
+.category-filter {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+}
+
+.category-btn {
+    padding: 8px 16px;
+    border: 2px solid var(--outline-variant);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    color: var(--on-surface-variant);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: var(--transition);
+    text-transform: capitalize;
+}
+
+.category-btn:hover {
+    border-color: var(--primary);
+    background: var(--surface-variant);
+    transform: translateY(-1px);
+}
+
+.category-btn.active {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: white;
+}
+
+/* Marketplace Stats */
+.marketplace-stats {
+    text-align: center;
+    margin-bottom: var(--space-lg);
+    color: var(--on-surface-variant);
+    font-size: 14px;
+}
+
+/* Category Sections */
+.category-section {
+    margin-bottom: var(--space-xl);
+}
+
+.category-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--on-surface);
+    margin-bottom: var(--space-lg);
+    text-transform: capitalize;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.category-title::before {
+    content: '';
+    width: 4px;
+    height: 24px;
+    background: var(--primary);
+    border-radius: 2px;
+}
+
+/* Agents Grid */
+.agents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Agent Cards */
+.agent-card {
+    background: var(--surface);
+    border: 1px solid var(--outline);
+    border-radius: var(--radius-lg);
+    padding: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.agent-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--outline-variant);
+}
+
+.agent-header {
+    padding: 24px 24px 0 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.agent-icon {
+    font-size: 32px;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--background-subtle) 0%, var(--outline) 100%);
+    border-radius: 14px;
+    flex-shrink: 0;
+    border: none;
+}
+
+.agent-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.agent-info h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--on-surface);
+    margin: 0 0 4px 0;
+    line-height: 1.3;
+    letter-spacing: -0.025em;
+}
+
+.agent-price {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--success);
+    margin: 0;
+    opacity: 0.9;
+}
+
+.agent-description {
+    color: var(--on-surface-variant);
+    line-height: 1.6;
+    margin: 0 24px 24px 24px;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.agent-footer {
+    padding: 20px 24px 24px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    border-top: 1px solid var(--surface-variant);
+    background: var(--background-light);
+}
+
+.agent-category {
+    background: var(--surface-variant);
+    color: var(--on-surface-variant);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: capitalize;
+    letter-spacing: 0.025em;
+}
+
+/* Try Button */
+.try-btn {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 2px 4px 0 rgba(59, 130, 246, 0.3);
+    letter-spacing: 0.025em;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.try-btn:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px 0 rgba(59, 130, 246, 0.4);
+    color: white;
+}
+
+.try-btn.login-required {
+    background: linear-gradient(135deg, #000000 0%, #1f1f1f 100%);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.4);
+}
+
+.try-btn.login-required:hover {
+    background: linear-gradient(135deg, #1f1f1f 0%, #000000 100%);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+    color: white;
+}
+
+/* No Results State */
+.no-results {
+    text-align: center;
+    padding: var(--space-xl);
+    color: var(--on-surface-variant);
+}
+
+.no-results-icon {
+    font-size: 4rem;
+    margin-bottom: var(--space-md);
+    opacity: 0.5;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .marketplace-title {
+        font-size: 2rem;
+    }
+    
+    .marketplace-filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .search-box {
+        max-width: none;
+    }
+    
+    .agents-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 0 16px;
+    }
+    
+    .category-filter {
+        justify-content: center;
+    }
+    
+    .agent-header {
+        padding: 20px 20px 0 20px;
+        gap: 12px;
+    }
+    
+    .agent-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 28px;
+    }
+    
+    .agent-info h3 {
+        font-size: 18px;
+    }
+    
+    .agent-description {
+        margin: 0 20px 20px 20px;
+        font-size: 14px;
+    }
+    
+    .agent-footer {
+        padding: 16px 20px 20px 20px;
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+    
+    .agent-category {
+        text-align: center;
+    }
+    
+    .try-btn {
+        width: 100%;
+        text-align: center;
+        padding: 12px 20px;
+        border-radius: 12px;
+    }
+}

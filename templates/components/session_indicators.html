@@ -1,0 +1,200 @@
+{% if chat_session and messages %}
+<div class="session-indicators">
+    <h4 class="session-indicators-title">Session Status</h4>
+    
+    <!-- Time Remaining Indicator -->
+    <div class="indicator-item">
+        <div class="indicator-header">
+            <span class="indicator-icon">⏰</span>
+            <span class="indicator-label">Time Remaining</span>
+            <span class="indicator-value" id="timeRemaining">
+                {% if time_remaining %}
+                    {{ time_remaining }}
+                {% else %}
+                    Calculating...
+                {% endif %}
+            </span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill time-progress" id="timeProgress" style="width: {{ time_percentage|default:100 }}%"></div>
+        </div>
+    </div>
+    
+    <!-- Messages Remaining Indicator -->
+    <div class="indicator-item">
+        <div class="indicator-header">
+            <span class="indicator-icon">💬</span>
+            <span class="indicator-label">Messages</span>
+            <span class="indicator-value" id="messageCount">
+                {{ message_count|default:0 }}/{{ message_limit }} used
+            </span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill message-progress" id="messageProgress" style="width: {{ message_percentage|default:0 }}%"></div>
+        </div>
+    </div>
+    
+    <!-- Warning Messages -->
+    <div class="session-warnings" id="sessionWarnings">
+        {% if time_percentage <= 20 %}
+            <div class="warning-item time-warning">
+                ⚠️ Session expires soon!
+            </div>
+        {% endif %}
+        {% if message_percentage >= 80 %}
+            <div class="warning-item message-warning">
+                ⚠️ Approaching message limit!
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.session-indicators {
+    background: var(--surface);
+    border: 1px solid var(--outline-variant);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+    min-width: min(280px, 100%);
+    max-width: min(280px, 100%);
+    margin-left: auto;
+}
+
+.session-indicators-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--on-surface);
+    margin: 0 0 var(--spacing-md) 0;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.indicator-item {
+    margin-bottom: var(--spacing-md);
+}
+
+.indicator-item:last-of-type {
+    margin-bottom: 0;
+}
+
+.indicator-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-xs);
+}
+
+.indicator-icon {
+    font-size: 16px;
+}
+
+.indicator-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--on-surface);
+    flex: 1;
+    margin-left: var(--spacing-sm);
+}
+
+.indicator-value {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--on-surface-variant);
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: var(--surface-variant);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.time-progress {
+    background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.time-progress[style*="width: 0"], 
+.time-progress[style*="width: 1"], 
+.time-progress[style*="width: 2"] {
+    background: linear-gradient(90deg, #ef4444, #dc2626);
+}
+
+.time-progress[style*="width: 3"], 
+.time-progress[style*="width: 4"], 
+.time-progress[style*="width: 5"],
+.time-progress[style*="width: 10"],
+.time-progress[style*="width: 15"],
+.time-progress[style*="width: 20"] {
+    background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+
+.message-progress {
+    background: linear-gradient(90deg, #3b82f6, #2563eb);
+}
+
+.message-progress[style*="width: 8"], 
+.message-progress[style*="width: 9"] {
+    background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+
+.message-progress[style*="width: 95"],
+.message-progress[style*="width: 96"],
+.message-progress[style*="width: 97"],
+.message-progress[style*="width: 98"],
+.message-progress[style*="width: 99"],
+.message-progress[style*="width: 100"] {
+    background: linear-gradient(90deg, #ef4444, #dc2626);
+}
+
+.session-warnings {
+    margin-top: var(--spacing-md);
+}
+
+.warning-item {
+    background: #fef3c7;
+    color: #92400e;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: var(--spacing-xs);
+    border-left: 3px solid #f59e0b;
+}
+
+.warning-item:last-child {
+    margin-bottom: 0;
+}
+
+.time-warning {
+    background: #fee2e2;
+    color: #991b1b;
+    border-left-color: #ef4444;
+}
+
+@media (max-width: 768px) {
+    .session-indicators {
+        padding: var(--spacing-md);
+    }
+    
+    .indicator-header {
+        flex-wrap: wrap;
+        gap: var(--spacing-xs);
+    }
+    
+    .indicator-value {
+        flex-basis: 100%;
+        text-align: right;
+    }
+}
+</style>
+{% endif %}

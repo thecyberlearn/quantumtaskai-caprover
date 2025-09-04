@@ -1,0 +1,751 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Quantum Tasks AI - AI & Task Automation Solutions{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/homepage.css' %}">
+{% endblock %}
+
+{% block content %}
+<style>
+/* Override main-container for homepage full-width sections */
+.main-container {
+    max-width: none;
+    padding: 0;
+}
+</style>
+<!-- Hero Section -->
+<section id="home" class="hero">
+    <div class="hero-container">
+        <!-- Trust Badge -->
+        <div class="trust-badge">
+            <span class="trust-badge-emoji">✨</span>
+            <span>Trusted by Industry Leaders</span>
+        </div>
+
+        <h1 class="hero-title">
+            <span class="hero-title-gradient">
+                AI & Cybersecurity
+            </span>
+            <br />
+            <span class="hero-title-normal">
+                Solutions
+            </span>
+        </h1>
+
+        <p class="hero-description">
+            Secure your digital future with state-of-the-art AI solutions and expert cybersecurity strategies tailored for your business needs.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="hero-buttons">
+            {% if user.is_authenticated %}
+                <a href="{% url 'agents:marketplace' %}" class="btn-primary">
+                    Explore AI Hub
+                </a>
+                <a href="{% url 'wallet:wallet' %}" class="btn-secondary">
+                    Manage Wallet
+                </a>
+            {% else %}
+                <a href="{% url 'authentication:register' %}" class="btn-primary">
+                    Get Protected Now
+                </a>
+                <a href="{% url 'agents:marketplace' %}" class="btn-secondary">
+                    Explore AI Hub
+                </a>
+            {% endif %}
+        </div>
+
+        <!-- Trust Indicators -->
+        <div class="trust-indicators">
+            <div class="trust-card">
+                <div class="trust-number">
+                    35+
+                </div>
+                <div class="trust-text">
+                    Years Experience
+                </div>
+            </div>
+            <div class="trust-card">
+                <div class="trust-number">
+                    24/7
+                </div>
+                <div class="trust-text">
+                    Rapid Response
+                </div>
+            </div>
+            <div class="trust-card">
+                <div class="trust-number">
+                    100%
+                </div>
+                <div class="trust-text">
+                    Secure Solutions
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Company Profile Section -->
+<section id="about" class="company-profile">
+    <div class="company-container">
+        <!-- Section Header -->
+        <div class="section-header">
+            <div class="section-badge">
+                <span class="section-badge-icon">🏢</span>
+                <span class="section-badge-text">About Quantum Tasks AI</span>
+            </div>
+            <h2 class="section-title">
+                Your Trusted Digital Guardian
+            </h2>
+            <p class="section-subtitle">
+                Pioneering the future of Automation & Cybersecurity with AI-powered solutions
+            </p>
+        </div>
+
+        <div class="company-grid">
+            <!-- Content Side -->
+            <div>
+                <div class="company-content-card">
+                    <!-- Decorative corner -->
+                    <div class="decorative-corner">
+                        🛡️
+                    </div>
+
+                    <h3 class="company-content-title">
+                        Defending Digital Frontiers
+                    </h3>
+                    
+                    <p class="company-content-text">
+                        At Quantum Tasks AI, we provide <strong>state-of-the-art AI & Cybersecurity solutions</strong> tailored to safeguard your business. From advanced AI Agents to robust defense strategies, we empower you to navigate the digital world with confidence.
+                    </p>
+
+                    <!-- Enhanced badges -->
+                    <div class="company-badges">
+                        <div class="company-badge company-badge-primary">
+                            <div class="company-badge-icon">📅</div>
+                            35+ Years Experience
+                        </div>
+                        <div class="company-badge company-badge-purple">
+                            <div class="company-badge-icon">🏆</div>
+                            Top Certifications
+                        </div>
+                    </div>
+
+                    <div class="company-badge company-badge-orange">
+                        <div class="company-badge-icon">⚫</div>
+                        Lean Six Sigma Black Belt
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visual Side -->
+            <div class="company-visual">
+                <!-- Main visual container -->
+                <div class="main-visual">
+                    <!-- Main icon -->
+                    <div class="main-visual-icon">
+                        🛡️
+                    </div>
+                </div>
+
+                <!-- Floating elements around the main visual -->
+                <div class="floating-element floating-element-1">
+                    🔒
+                </div>
+                <div class="floating-element floating-element-2">
+                    🤖
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom achievement strip -->
+        <div class="achievement-strip">
+            <div class="achievement-item">
+                <div class="achievement-icon">🎯</div>
+                <div class="achievement-title">Mission Critical</div>
+                <div class="achievement-text">Zero Compromise</div>
+            </div>
+            <div class="achievement-item">
+                <div class="achievement-icon">⚡</div>
+                <div class="achievement-title">Rapid Response</div>
+                <div class="achievement-text">24/7 Protection</div>
+            </div>
+            <div class="achievement-item">
+                <div class="achievement-icon">🔬</div>
+                <div class="achievement-title">Innovation</div>
+                <div class="achievement-text">Cutting Edge Tech</div>
+            </div>
+            <div class="achievement-item">
+                <div class="achievement-icon">🤝</div>
+                <div class="achievement-title">Trusted Partner</div>
+                <div class="achievement-text">Industry Leaders</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section id="services" class="services">
+    <div class="services-container">
+        <h2 class="services-title">
+            Our Services
+        </h2>
+        <p class="services-subtitle">
+            Tailored strategies for your business
+        </p>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">🛡️</div>
+                <h3 class="service-title">Cybersecurity Consultation</h3>
+                <p class="service-description">
+                    Tailored strategies, advanced threat detection, and comprehensive security frameworks to protect your digital assets and business operations.
+                </p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🤖</div>
+                <h3 class="service-title">AI Based Automation</h3>
+                <p class="service-description">
+                    Empower your Business with AI. Strategic AI adoption, machine learning solutions, and intelligent automation to transform your processes.
+                </p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">⚡</div>
+                <h3 class="service-title">Rapid Response Solutions</h3>
+                <p class="service-description">
+                    Rapid response to minimize damage. Emergency incident response and real-time threat mitigation to protect your business.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Clients Section -->
+<section class="clients">
+    <div class="clients-container">
+        <h2 class="clients-title">
+            Our Clients
+        </h2>
+        <div class="clients-grid">
+            <div class="client-card">
+                <div class="client-icon">🏭</div>
+                <h3 class="client-name">MTSV Foods Industries Pvt Ltd</h3>
+                <p class="client-industry">Food & Beverage Industry</p>
+            </div>
+            <div class="client-card">
+                <div class="client-icon">🏗️</div>
+                <h3 class="client-name">Apple Tree Industries</h3>
+                <p class="client-industry">Manufacturing & Processing</p>
+            </div>
+            <div class="client-card">
+                <div class="client-icon">💻</div>
+                <h3 class="client-name">TechStart Solutions</h3>
+                <p class="client-industry">Technology Consulting</p>
+            </div>
+            <div class="client-card">
+                <div class="client-icon">🚚</div>
+                <h3 class="client-name">Global Logistics Corp</h3>
+                <p class="client-industry">Supply Chain Management</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Founder Section -->
+<section class="founder">
+    <div class="founder-container">
+        <h2 class="founder-title">
+            Our Founders
+        </h2>
+        
+        <!-- JP Goenka -->
+        <div class="founder-grid">
+            <div class="founder-card-container">
+                <div class="founder-card">
+                    <div class="founder-avatar">👨‍💼</div>
+                    <h3 class="founder-name">Mr. JP Goenka</h3>
+                    <p class="founder-role">
+                        Founder & Business Development Leader
+                    </p>
+                    <div class="founder-badges">
+                        <div class="founder-badge">
+                            International Trading Expert
+                        </div>
+                        <div class="founder-badge">
+                            Dubai Business Leader
+                        </div>
+                        <div class="founder-badge">
+                            Global Perspective
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="founder-content">
+                <p class="founder-text">
+Mr. J. P. Goenka
+
+With over 45 years of entrepreneurial and leadership experience, Mr. J. P. Goenka has built a distinguished career across a diverse range of industries, including food processing, printed circuit boards, plastics manufacturing, beans splitting units, and international trade (import & export).
+
+             </p>
+                <p class="founder-text">
+                 Mr. Goenka brings deep global business insight, supported by an extensive international network and a strong understanding of various markets, products, and cultural dynamics. Recognizing the transformative impact of emerging technologies, he co-founded Quantum Task AI LLC FZ in partnership with Mr. Abhay Chauhan, focusing on advancing solutions in Artificial Intelligence and Cybersecurity—two key pillars shaping the future of global business.   
+                </p>
+            </div>
+        </div>
+
+        <!-- Abhay Pal Chauhan -->
+        <div class="founder-grid" style="margin-top: 3rem;">
+            <div class="founder-card-container">
+                <div class="founder-card">
+                    <div class="founder-avatar">👨‍💼</div>
+                    <h3 class="founder-name">Abhay Pal Chauhan</h3>
+                    <p class="founder-role">
+                        Founder & Principal Consultant
+                    </p>
+                    <div class="founder-badges">
+                        <div class="founder-badge">
+                            35+ Years Experience
+                        </div>
+                        <div class="founder-badge">
+                            Cybersecurity Expert
+                        </div>
+                        <div class="founder-badge">
+                            Six Sigma Black Belt
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="founder-content">
+                <p class="founder-text">
+                    Our Founder leverages over <strong>35 years of expertise</strong> in cybersecurity and process automation and optimization, backed by top certifications in Cybersecurity and <strong>Black Belt in Lean Six Sigma</strong>.
+                </p>
+                <p class="founder-text">
+                    His unique blend of technical knowledge and operational excellence ensures <strong>tailored, secure, and efficient solutions</strong> for our clients, driving business resilience and maximizing value in every engagement.
+                </p>
+                <div class="founder-quote">
+                    <p class="founder-quote-text">
+                        "Delivering top-tier solutions that combine cutting-edge technology with proven operational methodologies to secure and optimize your business operations."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="contact">
+    <div class="contact-container">
+        <h2 class="contact-title">
+            Get In Touch
+        </h2>
+        <div class="contact-grid">
+            <!-- Contact Form -->
+            <form class="contact-form" method="post" action="{% url 'core:contact_form' %}" id="contactForm">
+                {% csrf_token %}
+                <h3 class="form-title">Send us a Message</h3>
+                
+                <!-- Form Messages -->
+                <div id="form-messages" class="form-messages" style="display: none;"></div>
+                
+                <div class="form-group">
+                    <label for="name" class="form-label">Full Name *</label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        required
+                        class="form-input"
+                        maxlength="100"
+                        pattern="[a-zA-Z\s\-\.']+"
+                        title="Please enter a valid name using only letters, spaces, hyphens, dots, and apostrophes"
+                    />
+                    <div class="field-error" id="name-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address *</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        required
+                        class="form-input"
+                        maxlength="254"
+                    />
+                    <div class="field-error" id="email-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="company" class="form-label">Company</label>
+                    <input
+                        type="text"
+                        id="company"
+                        name="company"
+                        class="form-input"
+                        maxlength="100"
+                    />
+                    <div class="field-error" id="company-error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="message" class="form-label">Message *</label>
+                    <textarea
+                        id="message"
+                        name="message"
+                        required
+                        class="form-textarea"
+                        maxlength="1000"
+                        minlength="10"
+                        placeholder="Please describe your inquiry (minimum 10 characters)..."
+                    ></textarea>
+                    <div class="char-counter">
+                        <span id="message-count">0</span>/1000 characters
+                    </div>
+                    <div class="field-error" id="message-error"></div>
+                </div>
+                <button type="submit" class="form-submit" id="submitBtn">
+                    <span class="btn-text">Send Message</span>
+                    <span class="btn-loading" style="display: none;">
+                        <span class="spinner"></span> Sending...
+                    </span>
+                </button>
+            </form>
+
+            <!-- Contact Information -->
+            <div class="contact-info">
+                <h3 class="contact-info-title">Contact Information</h3>
+                
+                <!-- Mailing Address -->
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        📍
+                    </div>
+                    <div class="contact-details">
+                        <h4>Mailing Address</h4>
+                        <p>
+                            Meydan Grandstand, 6th floor<br />
+                            Meydan Road, Nad Al Sheba<br />
+                            Dubai, U.A.E.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Email Address -->
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        ✉️
+                    </div>
+                    <div class="contact-details">
+                        <h4>Email Address</h4>
+                        <p>
+                            <a href="mailto:abhay@quantumtaskai.com" class="contact-email">
+                                abhay@quantumtaskai.com
+                            </a>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Commitment Statement -->
+                <div class="commitment-statement">
+                    <p class="commitment-text">
+                        We are committed to deliver top-tier AI & Cybersecurity solutions for businesses of all sizes.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<style>
+/* Contact Form Security Enhancements */
+.form-messages {
+    margin-bottom: 20px;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.form-messages.success {
+    background: rgba(16, 185, 129, 0.1);
+    color: #059669;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.form-messages.error {
+    background: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.field-error {
+    color: #dc2626;
+    font-size: 12px;
+    margin-top: 4px;
+    min-height: 16px;
+}
+
+.char-counter {
+    text-align: right;
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 4px;
+}
+
+.char-counter.warning {
+    color: #d97706;
+}
+
+.char-counter.error {
+    color: #dc2626;
+}
+
+.form-input.error, .form-textarea.error {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 1px rgba(220, 38, 38, 0.1);
+}
+
+.spinner {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top: 2px solid white;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.btn-loading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+</style>
+
+<script>
+class SecureContactForm {
+    constructor() {
+        this.form = document.getElementById('contactForm');
+        this.submitBtn = document.getElementById('submitBtn');
+        this.messagesDiv = document.getElementById('form-messages');
+        this.messageTextarea = document.getElementById('message');
+        this.messageCounter = document.getElementById('message-count');
+        
+        if (this.form) {
+            this.init();
+        }
+    }
+    
+    init() {
+        this.setupEventListeners();
+        this.updateCharCounter();
+    }
+    
+    setupEventListeners() {
+        this.form.addEventListener('submit', this.handleSubmit.bind(this));
+        this.messageTextarea.addEventListener('input', this.updateCharCounter.bind(this));
+        
+        // Real-time validation
+        ['name', 'email', 'company', 'message'].forEach(fieldName => {
+            const field = document.getElementById(fieldName);
+            if (field) {
+                field.addEventListener('blur', () => this.validateField(fieldName));
+                field.addEventListener('input', () => this.clearFieldError(fieldName));
+            }
+        });
+    }
+    
+    updateCharCounter() {
+        const length = this.messageTextarea.value.length;
+        this.messageCounter.textContent = length;
+        
+        const counter = this.messageCounter.parentElement;
+        counter.classList.remove('warning', 'error');
+        
+        if (length > 900) {
+            counter.classList.add('error');
+        } else if (length > 800) {
+            counter.classList.add('warning');
+        }
+    }
+    
+    validateField(fieldName) {
+        const field = document.getElementById(fieldName);
+        const errorDiv = document.getElementById(`${fieldName}-error`);
+        const value = field.value.trim();
+        
+        let isValid = true;
+        let errorMessage = '';
+        
+        switch(fieldName) {
+            case 'name':
+                if (value.length < 2) {
+                    errorMessage = 'Name must be at least 2 characters long';
+                    isValid = false;
+                } else if (value.length > 100) {
+                    errorMessage = 'Name must be less than 100 characters';
+                    isValid = false;
+                } else if (!/^[a-zA-Z\s\-\.']+$/.test(value)) {
+                    errorMessage = 'Name contains invalid characters';
+                    isValid = false;
+                }
+                break;
+                
+            case 'email':
+                if (!value || value.length > 254) {
+                    errorMessage = 'Please provide a valid email address';
+                    isValid = false;
+                } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+                    errorMessage = 'Please enter a valid email format';
+                    isValid = false;
+                }
+                break;
+                
+            case 'company':
+                if (value && value.length > 100) {
+                    errorMessage = 'Company name must be less than 100 characters';
+                    isValid = false;
+                }
+                break;
+                
+            case 'message':
+                if (value.length < 10) {
+                    errorMessage = 'Message must be at least 10 characters long';
+                    isValid = false;
+                } else if (value.length > 1000) {
+                    errorMessage = 'Message must be less than 1000 characters';
+                    isValid = false;
+                }
+                break;
+        }
+        
+        if (isValid) {
+            field.classList.remove('error');
+            errorDiv.textContent = '';
+        } else {
+            field.classList.add('error');
+            errorDiv.textContent = errorMessage;
+        }
+        
+        return isValid;
+    }
+    
+    clearFieldError(fieldName) {
+        const field = document.getElementById(fieldName);
+        const errorDiv = document.getElementById(`${fieldName}-error`);
+        field.classList.remove('error');
+        errorDiv.textContent = '';
+    }
+    
+    validateForm() {
+        const fields = ['name', 'email', 'message'];
+        let isValid = true;
+        
+        fields.forEach(fieldName => {
+            if (!this.validateField(fieldName)) {
+                isValid = false;
+            }
+        });
+        
+        // Validate company if provided
+        const company = document.getElementById('company').value.trim();
+        if (company && !this.validateField('company')) {
+            isValid = false;
+        }
+        
+        return isValid;
+    }
+    
+    showMessage(message, type = 'success') {
+        this.messagesDiv.className = `form-messages ${type}`;
+        this.messagesDiv.textContent = message;
+        this.messagesDiv.style.display = 'block';
+        
+        // Scroll to message
+        this.messagesDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        
+        // Auto-hide success messages after 10 seconds
+        if (type === 'success') {
+            setTimeout(() => {
+                this.messagesDiv.style.display = 'none';
+            }, 10000);
+        }
+    }
+    
+    setLoading(loading) {
+        const btnText = this.submitBtn.querySelector('.btn-text');
+        const btnLoading = this.submitBtn.querySelector('.btn-loading');
+        
+        if (loading) {
+            btnText.style.display = 'none';
+            btnLoading.style.display = 'flex';
+            this.submitBtn.disabled = true;
+        } else {
+            btnText.style.display = 'inline';
+            btnLoading.style.display = 'none';
+            this.submitBtn.disabled = false;
+        }
+    }
+    
+    async handleSubmit(e) {
+        e.preventDefault();
+        
+        // Clear previous messages
+        this.messagesDiv.style.display = 'none';
+        
+        // Validate form
+        if (!this.validateForm()) {
+            this.showMessage('Please correct the errors above.', 'error');
+            return;
+        }
+        
+        this.setLoading(true);
+        
+        try {
+            const formData = new FormData(this.form);
+            
+            const response = await fetch(this.form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                this.showMessage(data.message, 'success');
+                this.form.reset();
+                this.updateCharCounter();
+                
+                // Clear any field errors
+                ['name', 'email', 'company', 'message'].forEach(fieldName => {
+                    this.clearFieldError(fieldName);
+                });
+                
+            } else {
+                this.showMessage(data.error || 'An error occurred. Please try again.', 'error');
+            }
+            
+        } catch (error) {
+            console.error('Contact form error:', error);
+            this.showMessage('Network error. Please check your connection and try again.', 'error');
+        } finally {
+            this.setLoading(false);
+        }
+    }
+}
+
+// Initialize contact form when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    new SecureContactForm();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,38 @@
+[
+  {
+    "slug": "analysis",
+    "name": "Analysis & Problem Solving",
+    "description": "AI-powered analysis tools for problem-solving and decision making",
+    "icon": "🧠"
+  },
+  {
+    "slug": "career-education",
+    "name": "Career & Education", 
+    "description": "Professional career guidance and educational resources",
+    "icon": "🎓"
+  },
+  {
+    "slug": "document-processing",
+    "name": "Document Processing",
+    "description": "AI-powered document analysis and processing tools", 
+    "icon": "📄"
+  },
+  {
+    "slug": "human-resources",
+    "name": "Human Resources",
+    "description": "HR automation and talent management solutions",
+    "icon": "💼"
+  },
+  {
+    "slug": "marketing",
+    "name": "Marketing & Advertising",
+    "description": "AI-powered marketing tools and advertising solutions",
+    "icon": "📢"
+  },
+  {
+    "slug": "consulting",
+    "name": "Business Consulting",
+    "description": "Professional business consultation and strategy services",
+    "icon": "💼"
+  }
+]

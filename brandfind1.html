@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tesla Brand Analysis</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-gray-900 to-gray-700 text-white p-6 shadow-lg">
+    <h1 class="text-3xl font-bold">🚀 Tesla Brand Analysis</h1>
+    <p class="text-sm mt-2">AI-powered social presence analysis</p>
+  </header>
+
+  <!-- Brand Info -->
+  <section class="max-w-5xl mx-auto mt-8 bg-white p-6 rounded-2xl shadow">
+    <h2 class="text-2xl font-semibold mb-4">📌 Brand Information</h2>
+    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <li><strong>Brand Name:</strong> Tesla</li>
+      <li><strong>Website:</strong> <a href="https://www.tesla.com" class="text-blue-600 hover:underline">www.tesla.com</a></li>
+      <li><strong>Analysis Date:</strong> 2025-08-27</li>
+      <li><strong>Processing:</strong> AI-powered analysis</li>
+    </ul>
+  </section>
+
+  <!-- Platforms Section -->
+  <section class="max-w-6xl mx-auto mt-8 bg-white p-6 rounded-2xl shadow">
+    <h2 class="text-2xl font-semibold mb-4">🌐 Platform Analysis</h2>
+    <div id="platforms" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </section>
+
+  <!-- Summary Section -->
+  <section class="max-w-5xl mx-auto mt-8 bg-white p-6 rounded-2xl shadow">
+    <h2 class="text-2xl font-semibold mb-4">📊 Summary</h2>
+    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <li><strong>Total Platforms Checked:</strong> 14</li>
+      <li><strong>Platforms Found:</strong> 8</li>
+      <li><strong>Platforms Missing:</strong> 6</li>
+      <li><strong>Completion:</strong> 57%</li>
+    </ul>
+    <div class="mt-4 w-full bg-gray-200 rounded-full h-4">
+      <div class="bg-green-500 h-4 rounded-full" style="width:57%"></div>
+    </div>
+  </section>
+
+  <!-- Recommendations Section -->
+  <section class="max-w-5xl mx-auto mt-8 bg-white p-6 rounded-2xl shadow">
+    <h2 class="text-2xl font-semibold mb-4">💡 Recommendations</h2>
+    <div class="space-y-4">
+      <div class="p-4 border-l-4 border-red-500 bg-red-50 rounded">
+        <strong>TikTok (High Priority):</strong> Growing platform for younger demographics & viral marketing
+      </div>
+      <div class="p-4 border-l-4 border-yellow-500 bg-yellow-50 rounded">
+        <strong>Pinterest (Medium Priority):</strong> Great for showcasing products and design aesthetics
+      </div>
+      <div class="p-4 border-l-4 border-yellow-500 bg-yellow-50 rounded">
+        <strong>Medium (Medium Priority):</strong> Professional publishing platform for thought leadership
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="mt-12 bg-gray-900 text-gray-300 text-center p-6">
+    <p class="text-sm">🔍 Analysis powered by AI | Version 1.0 | Platforms Supported: 14</p>
+  </footer>
+
+  <!-- Script to Render Platforms -->
+  <script>
+    const platforms = [
+      {name:"Google Business", found:true, verified:true, profile_url:"https://business.google.com/tesla", confidence:"high", notes:"Verified business listing with reviews and location info"},
+      {name:"LinkedIn", found:true, verified:true, profile_url:"https://linkedin.com/company/tesla-motors", confidence:"high", notes:"Official company page with verified badge"},
+      {name:"YouTube", found:true, verified:true, profile_url:"https://youtube.com/tesla", confidence:"high", notes:"Official channel with verification checkmark"},
+      {name:"TikTok", found:false, verified:null, profile_url:null, confidence:null, notes:"No official business account found"},
+      {name:"Instagram", found:true, verified:true, profile_url:"https://instagram.com/teslamotors", confidence:"high", notes:"Verified business account with blue checkmark"},
+      {name:"Pinterest", found:false, verified:null, profile_url:null, confidence:null, notes:"No official business account found"},
+      {name:"X (Twitter)", found:true, verified:true, profile_url:"https://x.com/tesla", confidence:"high", notes:"Official verified account with gold checkmark"},
+      {name:"Facebook", found:true, verified:true, profile_url:"https://facebook.com/tesla", confidence:"medium", notes:"Business page with verification badge"},
+      {name:"Medium", found:false, verified:null, profile_url:null, confidence:null, notes:"No official publication found"},
+      {name:"Tumblr", found:false, verified:null, profile_url:null, confidence:null, notes:"No official business account found"},
+      {name:"Threads", found:true, verified:false, profile_url:"https://threads.net/teslamotors", confidence:"low", notes:"Unverified account, authenticity uncertain"},
+      {name:"Quora", found:false, verified:null, profile_url:null, confidence:null, notes:"No official business space found"},
+      {name:"Reddit", found:false, verified:null, profile_url:null, confidence:null, notes:"No official business account found"},
+      {name:"Blue Sky", found:false, verified:null, profile_url:null, confidence:null, notes:"No official business account found"},
+    ];
+
+    const container = document.getElementById("platforms");
+
+    platforms.forEach(p => {
+      const card = document.createElement("div");
+      card.className = "p-4 border rounded-xl shadow hover:shadow-lg transition bg-gray-50";
+      
+      const title = document.createElement("h3");
+      title.className = "font-bold text-lg flex items-center gap-2";
+      title.innerHTML = p.name + (p.verified ? " ✅" : p.found ? " ⚠️" : " ❌");
+      card.appendChild(title);
+
+      const status = document.createElement("p");
+      if (p.found) {
+        status.className = "text-sm " + (p.verified ? "text-green-700" : "text-yellow-600");
+        status.innerText = p.verified ? `Verified (${p.confidence} confidence)` : `Found (Unverified)`;
+      } else {
+        status.className = "text-sm text-red-600";
+        status.innerText = "Not Found";
+      }
+      card.appendChild(status);
+
+      if (p.profile_url) {
+        const link = document.createElement("a");
+        link.href = p.profile_url;
+        link.target = "_blank";
+        link.className = "block text-blue-600 hover:underline mt-2";
+        link.innerText = "View Profile";
+        card.appendChild(link);
+      }
+
+      const notes = document.createElement("p");
+      notes.className = "text-xs mt-2 text-gray-600";
+      notes.innerText = p.notes;
+      card.appendChild(notes);
+
+      container.appendChild(card);
+    });
+  </script>
+
+</body>
+</html>

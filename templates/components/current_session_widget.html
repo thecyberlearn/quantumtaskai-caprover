@@ -1,0 +1,119 @@
+{% if chat_session %}
+<div class="agent-widget widget-small" style="min-width: min(280px, 100%); max-width: min(280px, 100%); margin-left: auto;">
+    <div class="widget-header">
+        <h3 class="widget-title">
+            <span class="widget-icon">💬</span>
+            Current Session
+        </h3>
+    </div>
+    <div class="widget-content">
+        <div class="current-session-info">
+            <div class="session-status-row">
+                <span class="status-label">Status:</span>
+                <span class="session-status status-{{ chat_session.status }}">
+                    {% if chat_session.status == 'active' %}
+                        ✅ {{ chat_session.get_status_display }}
+                    {% elif chat_session.status == 'expired' %}
+                        ⏰ {{ chat_session.get_status_display }}
+                    {% elif chat_session.status == 'completed' %}
+                        🏁 {{ chat_session.get_status_display }}
+                    {% else %}
+                        {{ chat_session.get_status_display }}
+                    {% endif %}
+                </span>
+            </div>
+            
+            <div class="session-id-row">
+                <span class="id-label">Session ID:</span>
+                <span class="session-id">{{ chat_session.session_id }}</span>
+            </div>
+            
+            <div class="session-time-row">
+                <span class="time-label">Started:</span>
+                <span class="session-time">{{ chat_session.created_at|date:"M d, H:i" }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.current-session-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.session-status-row,
+.session-id-row,
+.session-time-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-xs) 0;
+    border-bottom: 1px solid var(--outline-variant);
+}
+
+.session-status-row:last-child,
+.session-id-row:last-child,
+.session-time-row:last-child {
+    border-bottom: none;
+}
+
+.status-label,
+.id-label,
+.time-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--on-surface-variant);
+}
+
+.session-status {
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.session-status.status-active {
+    color: #10b981;
+}
+
+.session-status.status-expired {
+    color: #f59e0b;
+}
+
+.session-status.status-completed {
+    color: #6366f1;
+}
+
+.session-id {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--on-surface-variant);
+    background: var(--surface-variant);
+    padding: 2px 6px;
+    border-radius: 3px;
+    word-break: break-all;
+}
+
+.session-time {
+    font-size: 12px;
+    color: var(--on-surface);
+}
+
+@media (max-width: 768px) {
+    .session-id-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+    
+    .session-id {
+        font-size: 10px;
+        align-self: stretch;
+        text-align: center;
+    }
+}
+</style>
+{% endif %}

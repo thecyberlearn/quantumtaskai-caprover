@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}Redirecting to {{ page_title|default:"External Service" }} - Quantum Tasks AI{% endblock %}
+
+{% block extra_css %}
+<style>
+.redirect-page {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.redirect-content {
+    max-width: 600px;
+    padding: 3rem 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.redirect-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 1rem;
+}
+
+.redirect-timer {
+    font-size: 1.25rem;
+    color: #667eea;
+    font-weight: 600;
+    margin-bottom: 2rem;
+}
+
+.redirect-button {
+    display: inline-block;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    margin: 0.5rem;
+}
+
+.redirect-button:hover {
+    color: white;
+    text-decoration: none;
+}
+
+.spinner {
+    width: 3rem;
+    height: 3rem;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="redirect-page">
+    <div class="redirect-content">
+        <div class="spinner"></div>
+        <h1 class="redirect-title">Redirecting to {{ page_title|default:"External Service" }}</h1>
+        
+        <div class="redirect-timer">
+            Redirecting in <span id="countdown">3</span> seconds...
+        </div>
+        
+        <div>
+            <a href="{{ external_url }}" class="redirect-button">
+                Continue Now
+            </a>
+            <a href="{% url 'core:homepage' %}" class="redirect-button" style="background: #6c757d;">
+                Go Back Home
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+let countdown = 3;
+const countdownElement = document.getElementById('countdown');
+
+const timer = setInterval(() => {
+    countdown--;
+    countdownElement.textContent = countdown;
+    
+    if (countdown <= 0) {
+        clearInterval(timer);
+        window.location.href = "{{ external_url }}";
+    }
+}, 1000);
+</script>
+{% endblock %}

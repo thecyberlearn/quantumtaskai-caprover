@@ -1,0 +1,16 @@
+{
+  "slug": "ai-brand-strategist",
+  "name": "AI Brand Strategist",
+  "short_description": "Get AI-powered brand strategy insights and recommendations for your business",
+  "description": "Transform your brand with AI-driven strategic insights. Get expert guidance on brand positioning, messaging, visual identity, and competitive differentiation.",
+  "category": "marketing",
+  "price": 0.0,
+  "agent_type": "form",
+  "system_type": "direct_access",
+  "form_schema": {
+    "fields": []
+  },
+  "webhook_url": "https://agent.jotform.com/01986502acd276b48e3d5f39337046c8d9b6",
+  "access_url_name": "agents:direct_access_handler",
+  "display_url_name": "agents:direct_access_display"
+}

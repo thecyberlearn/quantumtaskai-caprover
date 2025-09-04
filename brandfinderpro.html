@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tesla — Brand Analysis (Standalone HTML)</title>
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* small helpers to mimic subtle glassy dark cards */
+    .card { background: rgba(15, 23, 42, 0.8); border-radius: 1rem; box-shadow: 0 6px 18px rgba(2,6,23,0.6); border: 1px solid rgba(255,255,255,0.04); }
+    .muted { color: #9ca3af; }
+    .badge { font-size: 0.75rem; padding: 0.25rem 0.6rem; border-radius: 9999px; }
+    .pill { background: rgba(255,255,255,0.03); padding: .3rem .6rem; border-radius: .5rem; }
+  </style>
+</head>
+<body class="bg-gradient-to-b from-gray-950 via-black to-black text-white min-h-screen">
+  <div class="max-w-7xl mx-auto px-6 py-8">
+    <!-- Header -->
+    <header class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-3">
+          <img src="https://www.tesla.com/themes/custom/tesla_frontend/assets/favicons/favicon.ico" alt="logo" class="w-8 h-8 rounded"/>
+          <div>
+            <h1 class="text-2xl md:text-3xl font-bold">Tesla — Digital Presence Report</h1>
+            <p class="text-sm muted mt-1">Website: <a href="https://www.tesla.com/" target="_blank" class="text-sky-300 hover:underline">https://www.tesla.com/</a></p>
+          </div>
+        </div>
+        <p class="text-xs muted mt-2" id="analysisDate">Analyzed on —</p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 w-full md:w-auto">
+        <div class="card p-4">
+          <p class="text-xs muted uppercase">Checked</p>
+          <p class="text-lg font-semibold" id="statChecked">—</p>
+        </div>
+        <div class="card p-4">
+          <p class="text-xs muted uppercase">Found</p>
+          <p class="text-lg font-semibold" id="statFound">—</p>
+        </div>
+        <div class="card p-4">
+          <p class="text-xs muted uppercase">Verified</p>
+          <p class="text-lg font-semibold" id="statVerified">—</p>
+        </div>
+        <div class="card p-4">
+          <p class="text-xs muted uppercase">Total Followers</p>
+          <p class="text-lg font-semibold" id="statFollowers">—</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Score & charts row -->
+    <section class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="card p-5">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm muted">Presence Score</p>
+            <div class="flex items-center gap-3">
+              <h2 class="text-3xl font-bold" id="finalScore">—</h2>
+              <span class="badge pill" id="grade">—</span>
+            </div>
+            <p class="text-xs muted mt-2" id="benchmark">Industry benchmark —</p>
+          </div>
+        </div>
+        <div class="mt-4">
+          <div class="h-2 bg-zinc-800 rounded-full overflow-hidden">
+            <div id="completionBar" style="width:0%" class="h-full bg-sky-500"></div>
+          </div>
+          <p class="text-xs muted mt-2">Profile completion: <span id="completionPct">—</span>%</p>
+        </div>
+      </div>
+
+      <div class="card p-5">
+        <p class="text-sm muted">Found vs Missing</p>
+        <canvas id="donut" class="mt-3"></canvas>
+      </div>
+
+      <div class="card p-5">
+        <p class="text-sm muted">Followers by Platform</p>
+        <canvas id="bars" class="mt-3"></canvas>
+      </div>
+    </section>
+
+    <!-- Recommendations -->
+    <section class="mt-6 card p-5">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Actionable Recommendations</h3>
+        <div class="text-xs muted">Biggest opportunity: <span id="biggestOpportunity">—</span></div>
+      </div>
+      <div class="mt-4 grid md:grid-cols-3 gap-4" id="recoList"></div>
+    </section>
+
+    <!-- Controls + Platform cards -->
+    <section class="mt-6 card p-5">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div class="flex items-center gap-3 w-full md:w-2/3">
+          <div class="relative w-full">
+            <input id="q" placeholder="Search platforms..." class="w-full p-3 rounded-lg bg-zinc-900 text-white" />
+            <div class="absolute right-3 top-3 text-xs muted">/</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 w-full md:w-1/3">
+          <select id="filter" class="w-1/2 p-2 rounded bg-zinc-900">
+            <option value="all">All</option>
+            <option value="found">Found</option>
+            <option value="missing">Missing</option>
+          </select>
+          <select id="sort" class="w-1/2 p-2 rounded bg-zinc-900">
+            <option value="default">Sort</option>
+            <option value="followers">Followers</option>
+            <option value="completeness">Completeness</option>
+            <option value="name">Name (A–Z)</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="platformGrid" class="mt-5 grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- Meta -->
+    <section class="mt-6 grid md:grid-cols-3 gap-4">
+      <div class="card p-4">
+        <p class="text-xs muted">Analyzer Version</p>
+        <p id="analyzerVersion" class="font-medium">—</p>
+      </div>
+      <div class="card p-4">
+        <p class="text-xs muted">Platforms Supported</p>
+        <p id="platformsSupported" class="font-medium">—</p>
+      </div>
+      <div class="card p-4">
+        <p class="text-xs muted">Analysis Method</p>
+        <p id="analysisMethod" class="font-medium">—</p>
+      </div>
+    </section>
+
+    <footer class="mt-8 text-center muted text-xs">Built with ♥ — Dark cards for emphasis as requested.</footer>
+  </div>
+
+  <script>
+    // Full JSON provided by user (trimmed keys preserved)
+    const RAW = {
+      "status": "success",
+      "brand_analysis": {
+        "brand_name": "Tesla",
+        "website": "https://www.tesla.com/",
+        "analysis_date": "2025-08-28T15:04:31.442279",
+        "processing_time": "Real-time SERP + GPT-4o analysis",
+        "analysis_method": "SerpAPI + GPT-4o with follower tracking"
+      },
+      "data": {
+        "platforms": [
+          {"name":"Google Business","found":false,"verified":null,"profile_url":null,"confidence":"low","search_ranking":null,"followers_count":null,"subscribers_count":null,"engagement_level":"unknown","posts_count":null,"verification_badge":"none","account_age_estimate":"unknown","last_activity":"unknown","profile_completeness":0,"notes":"No official Tesla profile found on Google Business.","activity_level":"unknown"},
+          {"name":"LinkedIn","found":true,"verified":true,"profile_url":"https://www.linkedin.com/company/tesla-motors","confidence":"high","search_ranking":1,"followers_count":12261045,"subscribers_count":null,"engagement_level":"high","posts_count":null,"verification_badge":"verified","account_age_estimate":"unknown","last_activity":"unknown","profile_completeness":90,"notes":"Official Tesla LinkedIn profile with over 12 million followers. Verified account.","activity_level":"unknown"},
+          {"name":"YouTube","found":true,"verified":true,"profile_url":"https://www.youtube.com/channel/UC5WjFrtBdufl6CZojX3D8dQ","confidence":"high","search_ranking":1,"followers_count":null,"subscribers_count":null,"engagement_level":"high","posts_count":null,"verification_badge":"verified","account_age_estimate":"unknown","last_activity":"recent","profile_completeness":80,"notes":"Official Tesla YouTube channel. Verified with regular content updates.","activity_level":"high"},
+          {"name":"TikTok","found":false,"verified":null,"profile_url":null,"confidence":"low","search_ranking":null,"followers_count":null,"subscribers_count":null,"engagement_level":"unknown","posts_count":null,"verification_badge":"none","account_age_estimate":"unknown","last_activity":"unknown","profile_completeness":0,"notes":"No official Tesla profile found on TikTok.","activity_level":"unknown"},
+          {"name":"Instagram","found":true,"verified":true,"profile_url":"https://www.instagram.com/teslamotors/","confidence":"high","search_ranking":1,"followers_count":null,"subscribers_count":null,"engagement_level":"high","posts_count":null,"verification_badge":"verified","account_age_estimate":"unknown","last_activity":"recent","profile_completeness":85,"notes":"Official Tesla Instagram profile. Verified with active engagement.","activity_level":"high"},
+          {"name":"Pinterest","found":false,"verified":null,"profile_url":null,"confidence":"low","search_ranking":null,"followers_count":null,"subscribers_count":null,"engagement_level":"unknown","posts_count":null,"verification_badge":"none","account_age_estimate":"unknown","last_activity":"unknown","profile_completeness":0,"notes":"No official Tesla profile found on Pinterest.","activity_level":"unknown"},
+          {"name":"X (Twitter)","found":true,"verified":true,"profile_url":"https://x.com/teslaownerssv","confidence":"medium","search_ranking":1,"followers_count":null,"subscribers_count":null,"engagement_level":"high","posts_count":null,"verification_badge":"verified","account_age_estimate":"unknown","last_activity":"recent","profile_completeness":70,"notes":"Tesla Owners Silicon Valley is a prominent Tesla-related account. Verified.","activity_level":"high"},
+          {"name":"Facebook","found":true,"verified":false,"profile_url":"https://www.facebook.com/TeslaMotorsCorp/","confidence":"medium","search_ranking":1,"followers_count":278870,"subscribers_count":null,"engagement_level":"medium","posts_count":null,"verification_badge":"none","account_age_estimate":"unknown","last_activity":"unknown","profile_completeness":60,"notes":"Tesla fan page with significant following but not verified.","activity_level":"medium"},
+          {"name":"Medium","found":false,"verified":null,"profile_url":null,"confidence":"low","search_ranking":null,"followers_count":null,"subscribers_count":null,"engagement_level":"unknown","posts_count":null,"verification_badge":"none","account_age_estimate":"unknown","last_activity":"unknown","profile_completeness":0,"notes":"No official Tesla profile found on Medium.","activity_level":"unknown"},
+          {"name":"Tumblr","found":false,"verified":null,"profile_url":null,"confidence":"low","search_ranking":null,"followers_count":null,"subscribers_count":null,"engagement_level":"unknown","posts_count":null,"verification_badge":"none","account_age_estimate":"unknown","last_activity":"unknown","profile_completeness":0,"notes":"No official Tesla profile found on Tumblr.","activity_level":"unknown"},
+          {"name":"Threads","found":false,"verified":null,"profile_url":null,"confidence":"low","search_ranking":null,"followers_count":null,"subscribers_count":null,"engagement_level":"unknown","posts_count":null,"verification_badge":"none","account_age_estimate":"unknown","last_activity":"unknown","profile_completeness":0,"notes":"No official Tesla profile found on Threads.","activity_level":"unknown"},
+          {"name":"Quora","found":false,"verified":null,"profile_url":null,"confidence":"low","search_ranking":null,"followers_count":null,"subscribers_count":null,"engagement_level":"unknown","posts_count":null,"verification_badge":"none","account_age_estimate":"unknown","last_activity":"unknown","profile_completeness":0,"notes":"No official Tesla profile found on Quora.","activity_level":"unknown"},
+          {"name":"Reddit","found":false,"verified":null,"profile_url":null,"confidence":"low","search_ranking":null,"followers_count":null,"subscribers_count":null,"engagement_level":"unknown","posts_count":null,"verification_badge":"none","account_age_estimate":"unknown","last_activity":"unknown","profile_completeness":0,"notes":"No official Tesla profile found on Reddit.","activity_level":"unknown"},
+          {"name":"Blue Sky","found":false,"verified":null,"profile_url":null,"confidence":"low","search_ranking":null,"followers_count":null,"subscribers_count":null,"engagement_level":"unknown","posts_count":null,"verification_badge":"none","account_age_estimate":"unknown","last_activity":"unknown","profile_completeness":0,"notes":"No official Tesla profile found on Blue Sky.","activity_level":"unknown"}
+        ],
+        "summary": {"total_platforms_checked":14,"platforms_found":5,"platforms_missing":9,"completion_percentage":35.71,"verification_rate":60,"average_search_ranking":1,"total_followers":12539915,"average_engagement":"medium","verified_accounts":3}
+      },
+      "competitor_analysis": {},
+      "insights": {"digital_presence_score":"B-","final_score":66.7,"strongest_presence":"LinkedIn","biggest_opportunity":"Google Business","total_followers":12539915,"average_engagement":"high","verification_gaps":1,"industry_benchmark":"Below average (36% vs 52% industry average)","recommendations":[{"platform":"Google Business","priority":"medium","reason":"Critical for local SEO and customer reviews","estimated_setup_time":"2-4 hours","potential_reach":"Local search dominance"},{"platform":"TikTok","priority":"high","reason":"Fastest-growing platform for viral marketing and reaching Gen Z/Millennial audiences","estimated_setup_time":"1-2 hours","potential_reach":"500K+ monthly views potential"},{"platform":"Pinterest","priority":"medium","reason":"Perfect for visual discovery and driving website traffic","estimated_setup_time":"2-3 hours","potential_reach":"50K+ monthly pin impressions"}]},
+      "meta": {"analyzer_version":"2.1 Pro Enhanced","platforms_supported":14,"analysis_method":"Real-time SERP search + GPT-4o analysis","model":"GPT-4o","serp_provider":"serpapi","features":["live_verification","actual_urls","search_rankings","follower_counts","engagement_metrics","verification_badges","account_age_estimation","profile_completeness","follower_weighted_scoring","competitor_analysis","actionable_insights"]}
+    };
+
+    // Utilities
+    const safeNum = (v) => (typeof v === 'number' ? v : 0);
+
+    // Fill header stats
+    document.getElementById('analysisDate').textContent = 'Analyzed on ' + new Date(RAW.brand_analysis.analysis_date).toLocaleString();
+    const summary = RAW.data.summary;
+    document.getElementById('statChecked').textContent = summary.total_platforms_checked;
+    document.getElementById('statFound').textContent = summary.platforms_found;
+    document.getElementById('statVerified').textContent = summary.verified_accounts;
+    document.getElementById('statFollowers').textContent = (summary.total_followers || 0).toLocaleString();
+
+    // Score / insights
+    document.getElementById('finalScore').textContent = RAW.insights.final_score;
+    document.getElementById('grade').textContent = RAW.insights.digital_presence_score;
+    document.getElementById('benchmark').textContent = 'Industry benchmark: ' + RAW.insights.industry_benchmark;
+    document.getElementById('completionPct').textContent = summary.completion_percentage;
+    document.getElementById('completionBar').style.width = (summary.completion_percentage || 0) + '%';
+    document.getElementById('biggestOpportunity').textContent = RAW.insights.biggest_opportunity;
+
+    // Recommendations
+    const recoList = document.getElementById('recoList');
+    RAW.insights.recommendations.forEach(r => {
+      const el = document.createElement('div');
+      el.className = 'p-4 card';
+      el.innerHTML = `
+        <div class="flex items-center justify-between">
+          <h4 class="font-semibold">${r.platform}</h4>
+          <span class="badge ${r.priority === 'high' ? 'bg-amber-500 text-black' : 'bg-sky-500 text-white'}">${r.priority}</span>
+        </div>
+        <p class="text-sm muted mt-2">${r.reason}</p>
+        <div class="mt-3 text-xs muted grid grid-cols-2 gap-2">
+          <div class="pill">Setup: ${r.estimated_setup_time}</div>
+          <div class="pill">Reach: ${r.potential_reach}</div>
+        </div>
+      `;
+      recoList.appendChild(el);
+    });
+
+    // Platform rendering logic
+    let platforms = RAW.data.platforms.map(p => ({
+      ...p,
+      followers: safeNum(p.followers_count) + safeNum(p.subscribers_count),
+      profile_completeness: p.profile_completeness || 0
+    }));
+
+    const grid = document.getElementById('platformGrid');
+    const q = document.getElementById('q');
+    const filterEl = document.getElementById('filter');
+    const sortEl = document.getElementById('sort');
+
+    function render() {
+      const term = q.value.trim().toLowerCase();
+      let arr = platforms.slice();
+      if (term) arr = arr.filter(p => (p.name + ' ' + (p.notes||'')).toLowerCase().includes(term));
+      if (filterEl.value === 'found') arr = arr.filter(p => p.found);
+      if (filterEl.value === 'missing') arr = arr.filter(p => !p.found);
+
+      if (sortEl.value === 'followers') arr.sort((a,b) => (b.followers||0) - (a.followers||0));
+      if (sortEl.value === 'completeness') arr.sort((a,b) => (b.profile_completeness||0) - (a.profile_completeness||0));
+      if (sortEl.value === 'name') arr.sort((a,b) => a.name.localeCompare(b.name));
+
+      grid.innerHTML = '';
+      arr.forEach(p => {
+        const c = document.createElement('div');
+        c.className = 'p-4 card';
+        const verified = p.verified === true;
+        const found = p.found === true;
+        c.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="text-lg font-semibold">${p.name}</div>
+            </div>
+            <div>
+              <span class="badge ${found ? (verified ? 'bg-emerald-500 text-black' : 'bg-sky-500 text-white') : 'bg-rose-500 text-white'}">${found ? (verified ? 'Verified' : 'Found') : 'Missing'}</span>
+            </div>
+          </div>
+          <div class="mt-3 grid grid-cols-2 gap-2 text-sm muted">
+            <div>Rank: ${p.search_ranking ?? '-'}</div>
+            <div>Followers: ${p.followers ? p.followers.toLocaleString() : '-'}</div>
+            <div>Engagement: ${p.engagement_level ?? '-'}</div>
+            <div>Completeness: ${p.profile_completeness}%</div>
+          </div>
+          <div class="mt-3 flex items-center gap-3 text-xs">
+            ${p.profile_url ? `<a href="${p.profile_url}" target="_blank" class="text-sky-300">Visit profile ↗</a>` : `<span class="muted">No URL</span>`}
+            ${verified ? `<span class="pill">Verified</span>` : ''}
+            ${p.last_activity ? `<span class="muted">Last: ${p.last_activity}</span>` : ''}
+          </div>
+          ${p.notes ? `<p class="text-xs muted mt-3">${p.notes}</p>` : ''}
+        `;
+        grid.appendChild(c);
+      });
+
+      // update charts with current filtered data
+      updateCharts(arr);
+    }
+
+    q.addEventListener('input', render);
+    filterEl.addEventListener('change', render);
+    sortEl.addEventListener('change', render);
+
+    // Charts setup
+    const donutCtx = document.getElementById('donut').getContext('2d');
+    const barsCtx = document.getElementById('bars').getContext('2d');
+    let donutChart, barChart;
+
+    function createCharts() {
+      const foundCount = platforms.filter(p => p.found).length;
+      const missingCount = platforms.length - foundCount;
+      donutChart = new Chart(donutCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Found','Missing'],
+          datasets: [{ data: [foundCount, missingCount], backgroundColor: ['#34d399','#f87171'] }]
+        },
+        options: { plugins: { legend: { labels: { color: '#cbd5e1' } } } }
+      });
+
+      barChart = new Chart(barsCtx, {
+        type: 'bar',
+        data: {
+          labels: platforms.map(p => p.name),
+          datasets: [{ label: 'Followers', data: platforms.map(p => p.followers||0), backgroundColor: '#60a5fa' }]
+        },
+        options: { scales: { x: { ticks: { color: '#9ca3af' } }, y: { ticks: { color: '#9ca3af' }, beginAtZero: true } }, plugins: { legend: { display: false } } }
+      });
+    }
+
+    function updateCharts(filteredArr) {
+      const foundCount = filteredArr.filter(p => p.found).length;
+      const missingCount = filteredArr.length - foundCount;
+      if (donutChart) {
+        donutChart.data.datasets[0].data = [foundCount, missingCount];
+        donutChart.update();
+      }
+      if (barChart) {
+        barChart.data.labels = filteredArr.map(p => p.name);
+        barChart.data.datasets[0].data = filteredArr.map(p => p.followers||0);
+        barChart.update();
+      }
+    }
+
+    // meta
+    document.getElementById('analyzerVersion').textContent = RAW.meta.analyzer_version;
+    document.getElementById('platformsSupported').textContent = RAW.meta.platforms_supported;
+    document.getElementById('analysisMethod').textContent = RAW.meta.analysis_method;
+
+    createCharts();
+    render();
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+{
+  "slug": "job-posting-generator",
+  "name": "Job Posting Generator",
+  "short_description": "Create professional job postings that attract top talent",
+  "description": "Generate comprehensive and attractive job postings with AI-powered content creation. Perfect for HR teams and recruiters.",
+  "category": "human-resources",
+  "price": 10.0,
+  "agent_type": "form",
+  "system_type": "webhook",
+  "form_schema": {
+    "fields": [
+      {
+        "name": "job_title",
+        "type": "text",
+        "label": "Job Title",
+        "required": true
+      },
+      {
+        "name": "company_name", 
+        "type": "text",
+        "label": "Company Name",
+        "required": true
+      },
+      {
+        "name": "job_description",
+        "type": "textarea",
+        "label": "Job Description",
+        "required": true,
+        "rows": 5
+      },
+      {
+        "name": "seniority_level",
+        "type": "select",
+        "label": "Seniority Level",
+        "required": true,
+        "options": [
+          {"value": "", "label": "Select level..."},
+          {"value": "entry", "label": "Entry Level"},
+          {"value": "junior", "label": "Junior"},
+          {"value": "mid", "label": "Mid Level"},
+          {"value": "senior", "label": "Senior"}
+        ]
+      },
+      {
+        "name": "location",
+        "type": "text", 
+        "label": "Location",
+        "required": true
+      }
+    ]
+  },
+  "webhook_url": "http://localhost:5678/webhook/43f84411-eaaa-488c-9b1f-856e90d0aaf6",
+  "access_url_name": "",
+  "display_url_name": ""
+}

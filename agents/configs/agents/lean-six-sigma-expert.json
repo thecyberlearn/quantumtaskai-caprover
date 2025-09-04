@@ -1,0 +1,16 @@
+{
+  "slug": "lean-six-sigma-expert",
+  "name": "Lean Six Sigma Expert",
+  "short_description": "Get expert guidance on Lean Six Sigma methodologies and process improvement strategies",
+  "description": "Optimize your business processes with expert Lean Six Sigma consultation. Our AI-powered expert provides comprehensive guidance on process improvement, waste reduction, quality enhancement, and operational excellence. Get personalized recommendations for implementing Lean Six Sigma methodologies in your organization.",
+  "category": "consulting",
+  "price": 0.0,
+  "agent_type": "form",
+  "system_type": "direct_access",
+  "form_schema": {
+    "fields": []
+  },
+  "webhook_url": "https://agent.jotform.com/01987b8843ae71129342f62a93d2c605efad",
+  "access_url_name": "agents:direct_access_handler",
+  "display_url_name": "agents:direct_access_display"
+}
