@@ -8,22 +8,23 @@ echo "======================================="
 
 # Run database migrations
 echo "📄 Running database migrations..."
-python manage.py migrate --noinput
+DJANGO_SETTINGS_MODULE=production_https_settings python manage.py migrate --noinput
 
 # Create cache table if needed
 echo "🗄️ Ensuring cache table exists..."
-python manage.py createcachetable || true
+DJANGO_SETTINGS_MODULE=production_https_settings python manage.py createcachetable || true
 
 # Check if we can access the database
 echo "🔍 Testing database connection..."
-python manage.py check --database default
+DJANGO_SETTINGS_MODULE=production_https_settings python manage.py check --database default
 
 # Start the application
 echo "🌐 Starting gunicorn server on port 3000..."
 echo "Health check endpoint: /health/"
+echo "🔒 HTTPS enabled with SSL redirect"
 echo "======================================="
 
-exec gunicorn netcop_hub.wsgi:application \
+DJANGO_SETTINGS_MODULE=production_https_settings exec gunicorn netcop_hub.wsgi:application
     --bind 0.0.0.0:3000 \
     --workers 2 \
     --timeout 120 \
