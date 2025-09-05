@@ -1,0 +1,54 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libpq-dev \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy and install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY . .
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    DEBUG=true \
+    SECRET_KEY="build-time-dummy-key-change-in-production" \
+    ALLOWED_HOSTS="*"
+
+# Collect static files
+RUN python manage.py collectstatic --noinput --settings=netcop_hub.settings || true
+
+# Make startup script executable
+RUN chmod +x start-dokploy.sh
+
+# Expose port 3000 for Dokploy
+EXPOSE 3000
+
+# Debug: Print Django info
+RUN python manage.py --version
+RUN python manage.py check --settings=netcop_hub.settings || true
+
+# Start with debug info
+CMD echo "🐛 Debug Mode - Django $(python manage.py --version)" && \
+    echo "🔍 Environment:" && \
+    echo "  - DEBUG: $DEBUG" && \
+    echo "  - ALLOWED_HOSTS: $ALLOWED_HOSTS" && \
+    echo "  - SECRET_KEY: $(echo $SECRET_KEY | cut -c1-10)..." && \
+    echo "🌐 Testing Django config..." && \
+    python manage.py check --settings=netcop_hub.settings && \
+    echo "✅ Django config OK" && \
+    echo "🚀 Starting server..." && \
+    gunicorn netcop_hub.wsgi:application \
+        --bind 0.0.0.0:3000 \
+        --workers 1 \
+        --timeout 120 \
+        --log-level debug \
+        --access-logfile - \
+        --error-logfile -
