@@ -1,16 +1,16 @@
 {
   "name": "quantum-tasks-ai",
   "type": "dockerfile",
-  "dockerfile": "./Dockerfile.dokploy.debug",
+  "dockerfile": "./Dockerfile.dokploy",
   "port": 3000,
   "healthCheck": "/health/",
   "buildArgs": {},
   "buildOptions": ["--no-cache"],
   "env": {
     "PYTHONUNBUFFERED": "1",
-    "DEBUG": "true",
-    "SECRET_KEY": "debug-key-change-in-production-123456789",
-    "ALLOWED_HOSTS": "website-quantumtaskai-wrczik-cc50ac-31-97-62-205.traefik.me,localhost,127.0.0.1,*",
+    "DEBUG": "false",
+    "SECRET_KEY": "production-key-change-this-123456789",
+    "ALLOWED_HOSTS": "website-quantumtaskai-wrczik-cc50ac-31-97-62-205.traefik.me,*",
     "DOKPLOY_PROJECT_NAME": "quantum-tasks-ai"
   }
 }
