@@ -8,7 +8,12 @@ import os
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
+# Parse ALLOWED_HOSTS from environment
+allowed_hosts_str = os.environ.get('ALLOWED_HOSTS', '')
+if allowed_hosts_str:
+    ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_str.split(',') if host.strip()]
+else:
+    ALLOWED_HOSTS = []
 
 # Database
 DATABASES = {
@@ -25,16 +30,33 @@ DATABASES = {
 # Static files
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Security settings
-SECURE_SSL_REDIRECT = True
+# Security settings - respect environment variables for Dokploy compatibility
+SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', 'true').lower() == 'true'
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_HSTS_SECONDS = 31536000
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+
+# Only enable secure cookies and HSTS if SSL redirect is enabled
+if SECURE_SSL_REDIRECT:
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+else:
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+
+# Trust proxy headers for Dokploy/Traefik
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
+
+# CSRF trusted origins from environment
+csrf_origins_str = os.environ.get('CSRF_TRUSTED_ORIGINS', '')
+if csrf_origins_str:
+    CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in csrf_origins_str.split(',') if origin.strip()]
+else:
+    CSRF_TRUSTED_ORIGINS = []
 
 # Logging
 LOGGING = {
