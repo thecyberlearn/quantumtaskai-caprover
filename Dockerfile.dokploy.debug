@@ -23,7 +23,7 @@ ENV PYTHONUNBUFFERED=1 \
     ALLOWED_HOSTS="*"
 
 # Collect static files
-RUN python manage.py collectstatic --noinput --settings=netcop_hub.settings || true
+RUN python manage.py collectstatic --noinput --settings=debug_settings || true
 
 # Make startup script executable
 RUN chmod +x start-dokploy.sh
@@ -33,7 +33,7 @@ EXPOSE 3000
 
 # Debug: Print Django info
 RUN python manage.py --version
-RUN python manage.py check --settings=netcop_hub.settings || true
+RUN python manage.py check --settings=debug_settings || true
 
 # Start with debug info
 CMD echo "🐛 Debug Mode - Django $(python manage.py --version)" && \
@@ -42,13 +42,16 @@ CMD echo "🐛 Debug Mode - Django $(python manage.py --version)" && \
     echo "  - ALLOWED_HOSTS: $ALLOWED_HOSTS" && \
     echo "  - SECRET_KEY: $(echo $SECRET_KEY | cut -c1-10)..." && \
     echo "🌐 Testing Django config..." && \
-    python manage.py check --settings=netcop_hub.settings && \
+    python manage.py check --settings=debug_settings && \
     echo "✅ Django config OK" && \
-    echo "🚀 Starting server..." && \
-    gunicorn netcop_hub.wsgi:application \
+    echo "🧪 Testing URL patterns..." && \
+    python manage.py show_urls --settings=debug_settings || echo "show_urls not available" && \
+    echo "🚀 Starting server with detailed logging..." && \
+    DJANGO_SETTINGS_MODULE=debug_settings gunicorn netcop_hub.wsgi:application
         --bind 0.0.0.0:3000 \
         --workers 1 \
         --timeout 120 \
         --log-level debug \
         --access-logfile - \
-        --error-logfile -
+        --error-logfile - \
+        --capture-output
