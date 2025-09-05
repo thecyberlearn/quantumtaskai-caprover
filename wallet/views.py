@@ -29,7 +29,7 @@ STRIPE_WEBHOOK_IPS = [
 
 
 @login_required
-@cache_user_data('wallet_data', timeout=300)  # Cache for 5 minutes
+# @cache_user_data('wallet_data', timeout=300)  # Cache for 5 minutes - decorator not defined
 def wallet_view(request):
     """Wallet management page with optimized queries"""
     from django.db.models import Sum, Q
