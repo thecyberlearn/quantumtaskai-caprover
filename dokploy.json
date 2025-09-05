@@ -1,15 +1,15 @@
 {
   "name": "quantum-tasks-ai",
   "type": "dockerfile",
-  "dockerfile": "./Dockerfile.dokploy",
+  "dockerfile": "./Dockerfile.dokploy.debug",
   "port": 3000,
   "healthCheck": "/health/",
   "buildArgs": {},
   "buildOptions": ["--no-cache"],
   "env": {
     "PYTHONUNBUFFERED": "1",
-    "DEBUG": "false",
-    "SECRET_KEY": "build-time-dummy-key-change-in-production",
+    "DEBUG": "true",
+    "SECRET_KEY": "debug-key-change-in-production-123456789",
     "ALLOWED_HOSTS": "*"
   }
 }
