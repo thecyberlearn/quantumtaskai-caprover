@@ -199,10 +199,7 @@ if database_url:
     # Add PostgreSQL optimization settings
     if psycopg2:
         db_config['OPTIONS'] = {
-            'MAX_CONNS': 20,
-            'OPTIONS': {
-                'isolation_level': psycopg2.extensions.ISOLATION_LEVEL_READ_COMMITTED,
-            }
+            'isolation_level': psycopg2.extensions.ISOLATION_LEVEL_READ_COMMITTED,
         }
     
     # Connection pooling and performance settings
