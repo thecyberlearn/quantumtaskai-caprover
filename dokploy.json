@@ -13,11 +13,13 @@
   "env": {
     "PYTHONUNBUFFERED": "1",
     "DEBUG": "false",
-    "SECRET_KEY": "production-key-change-this-123456789",
-    "ALLOWED_HOSTS": "quamtumtaskai.netcoptech.com,website-quantumtaskai-wrczik-cc50ac-31-97-62-205.traefik.me,*",
+    "SECRET_KEY": "${SECRET_KEY:-production-key-change-this-123456789}",
+    "ALLOWED_HOSTS": "${ALLOWED_HOSTS:-*}",
     "DOKPLOY_PROJECT_NAME": "quantum-tasks-ai",
-    "SECURE_SSL_REDIRECT": "false",
+    "SECURE_SSL_REDIRECT": "${SECURE_SSL_REDIRECT:-false}",
     "SECURE_PROXY_SSL_HEADER": "HTTP_X_FORWARDED_PROTO,https",
-    "CSRF_TRUSTED_ORIGINS": "https://quamtumtaskai.netcoptech.com,http://quamtumtaskai.netcoptech.com,https://website-quantumtaskai-wrczik-cc50ac-31-97-62-205.traefik.me,http://website-quantumtaskai-wrczik-cc50ac-31-97-62-205.traefik.me"
+    "CSRF_TRUSTED_ORIGINS": "${CSRF_TRUSTED_ORIGINS:-}",
+    "DATABASE_URL": "${DATABASE_URL:-}",
+    "DOMAIN": "${DOMAIN:-quamtumtaskai.netcoptech.com}"
   }
 }
