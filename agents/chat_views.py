@@ -12,7 +12,7 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
-from django_ratelimit.decorators import ratelimit
+# from django_ratelimit.decorators import ratelimit
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -33,7 +33,7 @@ logger = logging.getLogger('agents.chat')
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-@ratelimit(key='user', rate='5/m', method='POST', block=True)
+# @ratelimit(key='user', rate='5/m', method='POST', block=True)
 def start_chat_session(request):
     """Start a new chat session"""
     try:
@@ -139,7 +139,7 @@ Let's discover the root cause together! 💪"""
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-@ratelimit(key='user', rate='20/m', method='POST', block=True)
+# @ratelimit(key='user', rate='20/m', method='POST', block=True)
 def send_chat_message(request):
     """Send a message in a chat session"""
     try:

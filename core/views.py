@@ -4,8 +4,8 @@ from django.contrib import messages
 from django.http import JsonResponse, Http404
 from django.core.mail import send_mail
 from django.conf import settings
-from django_ratelimit.decorators import ratelimit
-from django_ratelimit import UNSAFE
+# from django_ratelimit.decorators import ratelimit
+# from django_ratelimit import UNSAFE
 from agents.services import AgentFileService
 from .models import ContactSubmission
 from django.db import connection
@@ -14,7 +14,7 @@ import re
 import time
 
 logger = logging.getLogger(__name__)
-@ratelimit(key='ip', rate='60/m', method='GET', block=False)
+# @ratelimit(key='ip', rate='60/m', method='GET', block=False)
 def homepage_view(request):
     """Homepage view with agent system and rate limiting"""
     # Check if rate limited
@@ -38,14 +38,14 @@ def homepage_view(request):
         logger.error(f"Homepage view error: {e}")
         messages.error(request, 'Unable to load homepage. Please try again.')
         return render(request, 'core/homepage.html', {'featured_agents': [], 'user_balance': 0})
-@ratelimit(key='ip', rate='60/m', method='GET', block=False)
+# @ratelimit(key='ip', rate='60/m', method='GET', block=False)
 def pricing_view(request):
     """Pricing page - redirect to marketplace"""
     # Redirect all pricing page access to the AI marketplace
     return redirect('agents:marketplace')
 
 
-@ratelimit(key='ip', rate='60/m', method='GET', block=False)
+# @ratelimit(key='ip', rate='60/m', method='GET', block=False)
 def digital_branding_view(request):
     """Digital branding services page with rate limiting"""
     # Check if rate limited
@@ -140,7 +140,7 @@ This is an automated notification from Quantum Tasks AI contact form.
         return False
 
 
-@ratelimit(key='ip', rate='3/m', method='POST', block=False)
+# @ratelimit(key='ip', rate='3/m', method='POST', block=False)
 def contact_form_view(request):
     """Handle contact form submission with security and rate limiting"""
     if request.method != 'POST':
@@ -215,7 +215,7 @@ def contact_form_view(request):
         }, status=500)
 
 
-@ratelimit(key='ip', rate='60/m', method='GET', block=False)
+# @ratelimit(key='ip', rate='60/m', method='GET', block=False)
 def health_check_view(request):
     """Simplified health check endpoint - no database dependency for startup"""
     start_time = time.time()
@@ -323,7 +323,7 @@ EXTERNAL_PAGES = {
 }
 
 
-@ratelimit(key='ip', rate='30/m', method='GET', block=False)
+# @ratelimit(key='ip', rate='30/m', method='GET', block=False)
 def external_page_view(request, page_name):
     """
     Simple external service wrapper view.

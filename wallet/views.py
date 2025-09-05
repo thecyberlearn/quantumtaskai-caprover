@@ -4,8 +4,8 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django_ratelimit.decorators import ratelimit
-from django_ratelimit import UNSAFE
+# from django_ratelimit.decorators import ratelimit
+# from django_ratelimit import UNSAFE
 from .stripe_handler import StripePaymentHandler
 import datetime
 import stripe
@@ -60,7 +60,7 @@ def wallet_view(request):
 
 
 @login_required
-@ratelimit(key='user', rate='5/m', method=UNSAFE, block=False)
+# @ratelimit(key='user', rate='5/m', method=UNSAFE, block=False)
 def wallet_topup_view(request):
     """Wallet top-up page with rate limiting (5 attempts per minute per user)"""
     # Check if rate limited
@@ -98,7 +98,7 @@ def wallet_topup_view(request):
     return render(request, 'wallet/wallet_topup.html')
 
 
-@ratelimit(key='user', rate='10/m', method='GET', block=False)
+# @ratelimit(key='user', rate='10/m', method='GET', block=False)
 def wallet_topup_success_view(request):
     """Payment success page with automatic payment verification"""
     # Check authentication first and clear any messages if redirecting to login
@@ -161,7 +161,7 @@ def wallet_topup_cancel_view(request):
 
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
-@ratelimit(key='user', rate='3/m', method='GET', block=True)
+# @ratelimit(key='user', rate='3/m', method='GET', block=True)
 def stripe_debug_view(request):
     """Secure debug endpoint for superusers only"""
     if not request.user.is_superuser:
@@ -216,7 +216,7 @@ def is_stripe_ip(ip_address):
 
 @csrf_exempt
 @require_http_methods(["POST"])
-@ratelimit(key='ip', rate='50/m', method='POST', block=True)
+# @ratelimit(key='ip', rate='50/m', method='POST', block=True)
 def stripe_webhook_view(request):
     """Secure Stripe webhook handler with IP validation and rate limiting"""
     timestamp = datetime.datetime.now().isoformat()
@@ -264,7 +264,7 @@ def stripe_webhook_view(request):
 
 @login_required
 @require_http_methods(["POST"])
-@ratelimit(key='user', rate='10/m', method='POST', block=False)
+# @ratelimit(key='user', rate='10/m', method='POST', block=False)
 def wallet_deduct_api(request):
     """API endpoint for wallet balance deduction (for direct N8N integration)"""
     # Check if rate limited

@@ -11,7 +11,7 @@ from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.core.exceptions import ValidationError
-from django_ratelimit.decorators import ratelimit
+# from django_ratelimit.decorators import ratelimit
 from .models import AgentExecution
 from .serializers import AgentExecutionSerializer
 from .services import AgentFileService
@@ -29,7 +29,7 @@ logger = logging.getLogger('agents.api')
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-@ratelimit(key='user', rate='10/m', method='POST', block=True)
+# @ratelimit(key='user', rate='10/m', method='POST', block=True)
 def execute_agent(request):
     """Execute an agent with provided input data"""
     try:
@@ -264,7 +264,7 @@ def execute_agent(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-@ratelimit(key='user', rate='30/m', method='GET', block=True)
+# @ratelimit(key='user', rate='30/m', method='GET', block=True)
 def execution_list(request):
     """List user's agent executions with optimized queries"""
     executions = AgentExecution.objects.filter(user=request.user).select_related('user').order_by('-created_at')
@@ -288,7 +288,7 @@ def execution_list(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-@ratelimit(key='user', rate='60/m', method='GET', block=True)
+# @ratelimit(key='user', rate='60/m', method='GET', block=True)
 def execution_detail(request, execution_id):
     """Get detailed execution information"""
     execution = get_object_or_404(AgentExecution, id=execution_id, user=request.user)
