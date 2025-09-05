@@ -191,8 +191,8 @@ IMPORTANT:
             }
         }
 
-# Global analyzer instance
-analyzer = BrandPresenceAnalyzer()
+# Global analyzer instance - commented out to avoid import-time initialization
+# analyzer = BrandPresenceAnalyzer()
 
 def analyze_brand_presence(brand_name: str, website_url: str) -> Dict[str, Any]:
     """
@@ -205,4 +205,6 @@ def analyze_brand_presence(brand_name: str, website_url: str) -> Dict[str, Any]:
     Returns:
         Analysis results dictionary
     """
+    # Create analyzer instance when needed to avoid import-time initialization
+    analyzer = BrandPresenceAnalyzer()
     return analyzer.analyze_brand_presence(brand_name, website_url)
