@@ -1,16 +1,13 @@
-from django.shortcuts import render
-from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.http import JsonResponse, Http404
 from django.db import connection
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import JsonResponse, Http404
 from django.core.mail import send_mail
 from django.conf import settings
 # from django_ratelimit.decorators import ratelimit
 # from django_ratelimit import UNSAFE
-# AgentFileService import removed since homepage redirects to marketplace
 from .models import ContactSubmission
-from django.db import connection
 import logging
 import re
 import time
@@ -212,18 +209,18 @@ def health_check_view(request):
                 'response_time_ms': round((time.time() - start_time) * 1000, 2)
             }
             
-        # If database is working, get agent count from files
+        # If database is working, add basic agent system check
         try:
-            active_agents = AgentFileService.get_active_agents()
-            agent_count = len(active_agents)
+            # Simple check - we can import the agents module
+            import agents
             health_data['checks']['agents'] = {
                 'status': 'healthy',
-                'active_count': agent_count
+                'system_available': True
             }
         except Exception as e:
             health_data['checks']['agents'] = {
                 'status': 'warning',
-                'error': 'Could not load agents',
+                'error': 'Agents module not available',
                 'message': str(e)[:100]
             }
             
