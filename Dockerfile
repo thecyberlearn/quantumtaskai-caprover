@@ -29,9 +29,6 @@ COPY . .
 # Create logs directory
 RUN mkdir -p logs
 
-# Collect static files
-RUN python manage.py collectstatic --noinput --settings=netcop_hub.settings
-
 # Create non-root user for security
 RUN adduser --disabled-password --gecos '' appuser && chown -R appuser:appuser /app
 USER appuser
