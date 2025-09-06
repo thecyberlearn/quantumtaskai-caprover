@@ -54,7 +54,7 @@ if missing_vars:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,testserver,quantumtaskai.com,www.quantumtaskai.com').split(',')
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,testserver,quantumtaskai.com,www.quantumtaskai.com,ai.quantumtaskai.com').split(',')
 
 # CapRover auto-detection
 if config('CAPROVER_GIT_COMMIT_SHA', default=''):
@@ -68,6 +68,9 @@ if config('DOKPLOY_PROJECT_NAME', default=''):
 if config('RAILWAY_ENVIRONMENT', default=''):
     # Use production domain for email verification links
     SITE_URL = 'https://www.quantumtaskai.com'
+elif config('DOKPLOY_PROJECT_NAME', default='') or config('COMPOSE_PROJECT_NAME', default=''):
+    # Use ai subdomain for Dokploy deployment
+    SITE_URL = 'https://ai.quantumtaskai.com'
 else:
     SITE_URL = config('SITE_URL', default='http://localhost:8000')
 
@@ -337,7 +340,7 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 EMAIL_FILE_PATH = config('EMAIL_FILE_PATH', default='/tmp/app-messages')
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='Quantum Tasks AI <noreply@quantumtaskai.com>')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='Quantum Tasks AI <noreply@ai.quantumtaskai.com>')
 
 # Email timeout settings for production stability
 EMAIL_TIMEOUT = 30
@@ -364,13 +367,26 @@ if config('RAILWAY_ENVIRONMENT', default=''):
         CSRF_TRUSTED_ORIGINS.append(f'https://{railway_url}')
     
     # Also add production domains (both www and non-www)
-    CSRF_TRUSTED_ORIGINS.extend(['https://quantumtaskai.com', 'https://www.quantumtaskai.com'])
+    CSRF_TRUSTED_ORIGINS.extend(['https://quantumtaskai.com', 'https://www.quantumtaskai.com', 'https://ai.quantumtaskai.com'])
     
     # Railway-specific optimizations
     USE_X_FORWARDED_HOST = True
     USE_X_FORWARDED_PORT = True
     
     # Database connection optimization for Railway PostgreSQL
+    if 'default' in DATABASES:
+        DATABASES['default']['CONN_MAX_AGE'] = 600  # 10 minutes connection pooling
+
+# Add Dokploy configuration if running on Dokploy
+if config('DOKPLOY_PROJECT_NAME', default='') or config('COMPOSE_PROJECT_NAME', default=''):
+    # Add ai.quantumtaskai.com to trusted origins
+    CSRF_TRUSTED_ORIGINS.extend(['https://ai.quantumtaskai.com', 'https://quantumtaskai.com', 'https://www.quantumtaskai.com'])
+    
+    # Dokploy-specific optimizations
+    USE_X_FORWARDED_HOST = True
+    USE_X_FORWARDED_PORT = True
+    
+    # Database connection optimization for PostgreSQL
     if 'default' in DATABASES:
         DATABASES['default']['CONN_MAX_AGE'] = 600  # 10 minutes connection pooling
 
