@@ -6,7 +6,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 # from django_ratelimit.decorators import ratelimit
 # from django_ratelimit import UNSAFE
-from agents.services import AgentFileService
+# AgentFileService import removed since homepage redirects to marketplace
 from .models import ContactSubmission
 from django.db import connection
 import logging
@@ -16,28 +16,9 @@ import time
 logger = logging.getLogger(__name__)
 # @ratelimit(key='ip', rate='60/m', method='GET', block=False)
 def homepage_view(request):
-    """Homepage view with agent system and rate limiting"""
-    # Check if rate limited
-    if getattr(request, 'limited', False):
-        logger.warning(f"Homepage rate limit exceeded for IP {request.META.get('REMOTE_ADDR')}")
-        messages.warning(request, 'Too many requests. Please wait a moment before refreshing.')
-    
-    try:
-        # Get featured agents for homepage from files
-        all_agents = AgentFileService.get_active_agents()
-        featured_agents = all_agents[:6]  # Get first 6 agents
-        
-        context = {
-            'user_balance': request.user.wallet_balance if request.user.is_authenticated else 0,
-            'featured_agents': featured_agents,
-        }
-        
-        return render(request, 'core/homepage.html', context)
-        
-    except Exception as e:
-        logger.error(f"Homepage view error: {e}")
-        messages.error(request, 'Unable to load homepage. Please try again.')
-        return render(request, 'core/homepage.html', {'featured_agents': [], 'user_balance': 0})
+    """Homepage view - redirect to marketplace since homepage was moved to static"""
+    # Redirect to the AI marketplace as the main landing page
+    return redirect('agents:marketplace')
 # @ratelimit(key='ip', rate='60/m', method='GET', block=False)
 def pricing_view(request):
     """Pricing page - redirect to marketplace"""
@@ -47,23 +28,9 @@ def pricing_view(request):
 
 # @ratelimit(key='ip', rate='60/m', method='GET', block=False)
 def digital_branding_view(request):
-    """Digital branding services page with rate limiting"""
-    # Check if rate limited
-    if getattr(request, 'limited', False):
-        logger.warning(f"Digital branding page rate limit exceeded for IP {request.META.get('REMOTE_ADDR')}")
-        messages.warning(request, 'Too many requests. Please wait a moment before refreshing.')
-    
-    try:
-        context = {
-            'user_balance': request.user.wallet_balance if request.user.is_authenticated else 0,
-        }
-        
-        return render(request, 'core/digital_branding.html', context)
-        
-    except Exception as e:
-        logger.error(f"Digital branding view error: {e}")
-        messages.error(request, 'Unable to load digital branding page. Please try again.')
-        return render(request, 'core/digital_branding.html', {})
+    """Digital branding services page - redirect to marketplace"""
+    # Redirect to the AI marketplace since digital branding template was removed
+    return redirect('agents:marketplace')
 
 
 def validate_contact_input(name, email, message, company=""):
