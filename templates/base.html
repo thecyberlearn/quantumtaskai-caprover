@@ -58,6 +58,7 @@
                     <img src="{% static 'img/logo.png' %}" alt="Quantum Tasks AI" class="logo-img">
                 </a>
                 <nav class="header-nav" id="header-nav">
+                    <a href="https://www.quantumtaskai.com/" class="nav-link" target="_blank">Home</a>
                     <a href="{% url 'agents:marketplace' %}" class="nav-link {% if request.resolver_match.url_name == 'marketplace' %}active{% endif %}">AI Marketplace</a>
                 </nav>
                 <button class="mobile-nav-toggle" onclick="toggleMobileNav()" aria-label="Toggle navigation">
