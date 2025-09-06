@@ -1,8 +1,8 @@
 services:
   web:
     build: .
-    ports:
-      - "3000:8000"
+    expose:
+      - "8000"
     environment:
       - DEBUG=false
       - ALLOWED_HOSTS=ai.quantumtaskai.com,*.quantumtaskai.com,localhost,127.0.0.1
