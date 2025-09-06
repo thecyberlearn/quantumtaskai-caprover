@@ -54,12 +54,10 @@
     <div class="header-component theme-professional">
         <div class="header-container">
             <div class="header-left">
-                <a href="{% url 'core:homepage' %}" class="logo-section">
+                <a href="{% url 'agents:marketplace' %}" class="logo-section">
                     <img src="{% static 'img/logo.png' %}" alt="Quantum Tasks AI" class="logo-img">
                 </a>
                 <nav class="header-nav" id="header-nav">
-                    <a href="{% url 'core:homepage' %}" class="nav-link {% if request.resolver_match.url_name == 'homepage' %}active{% endif %}">Home</a>
-                    <a href="{% url 'core:digital_branding' %}" class="nav-link {% if request.resolver_match.url_name == 'digital_branding' %}active{% endif %}">AI Digital Branding</a>
                     <a href="{% url 'agents:marketplace' %}" class="nav-link {% if request.resolver_match.url_name == 'marketplace' %}active{% endif %}">AI Marketplace</a>
                 </nav>
                 <button class="mobile-nav-toggle" onclick="toggleMobileNav()" aria-label="Toggle navigation">
